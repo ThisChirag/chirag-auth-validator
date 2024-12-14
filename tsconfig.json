@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2020", // Use ES2020 features (Node.js 14+ support)
+    "module": "CommonJS", // Use CommonJS module system
+    "outDir": "./dist", // Output compiled files in dist/
+    "rootDir": "./src", // Treat src/ as the base directory
+    "esModuleInterop": true, // Allow default imports from CommonJS modules
+    "strict": true, // Enable strict type-checking options
+    "moduleResolution": "node", // Use Node.js-style module resolution
+    "forceConsistentCasingInFileNames": true, // Enforce consistent casing
+    "skipLibCheck": true // Skip type checking of declaration files
+  },
+  "include": ["src/**/*"], // Include src and test folders
+  "exclude": ["node_modules", "dist"] // Exclude unnecessary files
+}
