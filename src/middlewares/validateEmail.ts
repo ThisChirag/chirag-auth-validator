@@ -1,19 +1,12 @@
-import { NextFunction, Request, Response } from 'express';
 import validator from 'validator';
 
-export const validateEmail = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const email = req.body;
+export const validateEmail = async(email:string): Promise<boolean> =>{
 
-  if (!email || !validator.isEmail(email)) {
-    res.status(400).json({
-      msg: 'Invalid Email Format',
-    });
-    return;
+  const isValid = validator.isEmail(email)
+  if(!email || !isValid){
+    return false;
   }
+  else return true;
 
-  next();
-};
+  console.log(isValid);
+}

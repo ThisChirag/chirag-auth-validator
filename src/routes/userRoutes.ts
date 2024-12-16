@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { home, login } from '../controllers/applicationLogic';
 import { authenticateToken } from '../middlewares/authenticateToken';
 import { rateLimiter } from '../middlewares/rateLimiter';
-import { requestOtp, verifyOtp } from '../controllers/otpController'; // Import OTP controllers
+import { changePassword, requestOtp, verifyOtp, verifyOtpForChangePassword } from '../controllers/otpController'; // Import OTP controllers
 
 const userRoute: Router = Router();
 
@@ -23,5 +23,8 @@ userRoute.post(
   rateLimiter('verify-otp', 5, 60),
   verifyOtp,
 ); // Verify OTP and create account
+
+userRoute.post('/changepassword', changePassword);
+userRoute.post('/verify-cp', verifyOtpForChangePassword);
 
 export default userRoute;

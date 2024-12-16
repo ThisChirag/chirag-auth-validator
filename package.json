@@ -42,7 +42,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
-    "@types/node": "^22.9.1",
+    "@types/node": "^22.10.2",
     "@types/validator": "^13.12.2",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
@@ -51,19 +51,19 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "nodemon": "^3.1.7",
+    "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
     "prisma": "^5.22.0",
     "tsc-watch": "^6.2.1",
-    "typescript": "^5.6.3",
+    "typescript": "^5.7.2",
     "uuid": "^11.0.3"
   },
   "dependencies": {
     "@prisma/client": "^6.0.1",
     "@types/pg": "^8.11.10",
-    "axios": "^1.7.7",
+    "axios": "^1.7.9",
     "dns": "^0.2.2",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
     "postmark": "^4.0.5",
@@ -72,8 +72,8 @@
     "validator": "^13.12.0"
   },
   "peerDependencies": {
-    "express": "^4.0.0",
-    "@prisma/client": "^6.0.0"
+    "@prisma/client": "^6.0.0",
+    "express": "^4.0.0"
   },
   "packageManager": "pnpm@9.14.2"
 }

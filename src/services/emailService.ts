@@ -14,7 +14,7 @@ const postmarkClient = new postmark.ServerClient(
 export const sendVerificationEmail = async (
   email: string,
   otp: string,
-): Promise<void> => {
+): Promise<boolean> => {
   try {
     const response = await postmarkClient.sendEmail({
       From: YOUR_DOMAIN, // Verified domain email
@@ -24,8 +24,9 @@ export const sendVerificationEmail = async (
       HtmlBody: `<p>Your OTP is <b>${otp}</b>. It is valid for 5 minutes.</p>`,
     });
     console.log('Verification email sent successfully:', response);
+    return true;
   } catch (error: any) {
     console.error('Failed to send verification email:', error.message || error);
-    throw new Error('Failed to send verification email');
+    return false;
   }
 };
