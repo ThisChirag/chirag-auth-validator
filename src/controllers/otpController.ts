@@ -118,10 +118,11 @@ export const verifyOtp = async (req: Request, res: Response) => {
   }
 };
 
+//ChangeP Password Route
 export const changePassword = async (req: Request, res: Response) => {
-  const { email, oldpassword, newpassword } = req.body;
+  const { email, oldpassword} = req.body;
 
-  if (!email || !oldpassword || !newpassword) {
+  if (!email || !oldpassword) {
     res.status(400).json({
       msg: 'please provide all the details',
     });
@@ -144,28 +145,6 @@ export const changePassword = async (req: Request, res: Response) => {
     });
     return;
   }
-
-  if (oldpassword == newpassword) {
-    res.status(400).json({
-      msg: 'new password cannot be same as the old one, please choose a different password',
-    });
-    return;
-  }
-
-  if (newpassword.length < 8) {
-    res
-      .status(401)
-      .json({ msg: 'new password should be atleast of 8 characters' });
-    return;
-  }
-
-  if (!validatePassword(newpassword)) {
-    res.status(401).json({
-      msg: 'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character',
-    });
-    return;
-  }
-
   const hashedPassword = user_present?.password;
   const verifyPass = await verifyingPassword(oldpassword, hashedPassword);
 
@@ -192,7 +171,7 @@ export const verifyOtpForChangePassword = async (
 ) => {
   const { email, otp, newpassword } = req.body;
 
-  //the new password on the front-end should match the one the user entered in the previous route, not be taken from the client....
+
 
   if (!email || !otp || !newpassword) {
     res.status(400).json({
@@ -215,6 +194,30 @@ export const verifyOtpForChangePassword = async (
   if (!user_present) {
     res.status(404).json({
       msg: 'user not found, please enter the correct email',
+    });
+    return;
+  }
+  const oldpassword = user_present?.password;
+  const isBothPasswordSame = await verifyingPassword(newpassword, oldpassword);
+
+ 
+  if (isBothPasswordSame) {
+    res.status(400).json({
+      msg: 'new password cannot be same as the old one, please choose a different password',
+    });
+    return;
+  }
+
+  if (newpassword.length < 8) {
+    res
+      .status(401)
+      .json({ msg: 'new password should be atleast of 8 characters' });
+    return;
+  }
+
+  if (!validatePassword(newpassword)) {
+    res.status(401).json({
+      msg: 'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character',
     });
     return;
   }
