@@ -43,7 +43,9 @@
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.2",
+    "@types/swagger-ui-express": "^4.1.7",
     "@types/validator": "^13.12.2",
+    "@types/yamljs": "^0.2.34",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "bcrypt": "^5.1.1",
@@ -69,7 +71,9 @@
     "postmark": "^4.0.5",
     "promises": "^0.2.5",
     "redis": "^4.7.0",
-    "validator": "^13.12.0"
+    "swagger-ui-express": "^5.0.1",
+    "validator": "^13.12.0",
+    "yamljs": "^0.3.0"
   },
   "peerDependencies": {
     "@prisma/client": "^6.0.0",

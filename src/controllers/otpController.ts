@@ -120,7 +120,7 @@ export const verifyOtp = async (req: Request, res: Response) => {
 
 //ChangeP Password Route
 export const changePassword = async (req: Request, res: Response) => {
-  const { email, oldpassword} = req.body;
+  const { email, oldpassword } = req.body;
 
   if (!email || !oldpassword) {
     res.status(400).json({
@@ -171,8 +171,6 @@ export const verifyOtpForChangePassword = async (
 ) => {
   const { email, otp, newpassword } = req.body;
 
-
-
   if (!email || !otp || !newpassword) {
     res.status(400).json({
       msg: 'please provide all the details',
@@ -200,7 +198,6 @@ export const verifyOtpForChangePassword = async (
   const oldpassword = user_present?.password;
   const isBothPasswordSame = await verifyingPassword(newpassword, oldpassword);
 
- 
   if (isBothPasswordSame) {
     res.status(400).json({
       msg: 'new password cannot be same as the old one, please choose a different password',
@@ -252,7 +249,7 @@ export const verifyOtpForChangePassword = async (
 };
 
 export const forgotpassword = async (req: Request, res: Response) => {
-  const {email} = req.body;
+  const { email } = req.body;
 
   if (!email) {
     res.status(400).json({
@@ -263,10 +260,10 @@ export const forgotpassword = async (req: Request, res: Response) => {
 
   const isEmailValid = await validateEmail(email);
 
-  if(!isEmailValid){
+  if (!isEmailValid) {
     res.status(400).send({
-      msg: "not a valid email address, please enter the correct one",
-    })
+      msg: 'not a valid email address, please enter the correct one',
+    });
     return;
   }
   const user_present = await prisma.user.findUnique({
@@ -295,7 +292,7 @@ export const forgotpassword = async (req: Request, res: Response) => {
 };
 
 export const verifyOtpForgotPassword = async (req: Request, res: Response) => {
-  const { email, newpassword, otp} = req.body;
+  const { email, newpassword, otp } = req.body;
 
   if (!email || !newpassword || !otp) {
     res.status(400).json({

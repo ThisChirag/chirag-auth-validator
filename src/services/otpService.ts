@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { createClient } from 'redis';
 const redisClient = createClient();
 
-
 const OTP_LENGTH = Number(process.env.OTP_LENGTH) || 6;
 
 export const generateOtp = (): string => {
@@ -24,7 +23,7 @@ export const verifyOtp = async (
 ): Promise<boolean> => {
   const storedOtp = await getOtp(email);
 
-  if(storedOtp === otp){
+  if (storedOtp === otp) {
     await deleteKey(email);
   }
   return storedOtp === otp;

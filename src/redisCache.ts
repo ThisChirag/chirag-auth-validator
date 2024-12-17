@@ -58,6 +58,6 @@ export const getOtp = async (key: string): Promise<string | null> => {
   return await redisClient.get(key);
 };
 
-export const deleteKey = async(key:string): Promise<number>  =>{
+export const deleteKey = async (key: string): Promise<number> => {
   return await redisClient.del(key);
-}
+};

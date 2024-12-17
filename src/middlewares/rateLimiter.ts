@@ -33,7 +33,8 @@ export const rateLimiter = (
       const requests = await redisClient.incr(key);
 
       if (requests === limit) {
-        // AOF mode is on... will save its data to disk and restore it when restarted..to change this behavior, we can make some changes in the redis-config..
+        // AOF mode is on... it will save its data to disk and restore it when restarted..to change this behavior, we can make some changes in the redis-config..
+        
         // setting the expiration time for the key when it is created
         await redisClient.expire(key, windowSeconds);
       }

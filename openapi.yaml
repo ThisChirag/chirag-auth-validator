@@ -1,0 +1,326 @@
+openapi: 3.0.3
+info:
+  title: Chirag Auth Validator API
+  version: "1.0.0"
+  description: >
+    A Node.js/Express-based API for user authentication, OTP-based verification, 
+    password reset, and protected routes.
+
+servers:
+  - url: http://localhost:8080/api
+    description: Local development server
+
+paths:
+  /home:
+    get:
+      summary: Access protected route
+      description: Return a success message if the user is authenticated.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully accessed home route
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You are in /api/home route and have successfully setup the authentication
+        '401':
+          description: Unauthorized, missing or invalid token.
+
+  /login:
+    post:
+      summary: User Login
+      description: Login with email and password to receive a JWT token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  example: Password123!
+      responses:
+        '200':
+          description: Login successful, returns JWT token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Login Successful, token is valid for 1 hour
+                  newToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '400':
+          description: Missing credentials
+        '401':
+          description: Wrong email or password
+        '404':
+          description: User not found
+        '429':
+          description: Too many requests (rate-limited)
+
+  /signup/request-verification:
+    post:
+      summary: Request OTP for Signup
+      description: Sends an OTP to user’s email for account creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: newuser@example.com
+      responses:
+        '200':
+          description: OTP sent to email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Verification OTP sent to your email
+        '400':
+          description: Invalid email or domain
+        '409':
+          description: User already exists
+        '429':
+          description: Too many requests (rate-limited)
+
+  /signup/verify-otp:
+    post:
+      summary: Verify OTP and create new account
+      description: After receiving OTP, verify it and create a new `User`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - otp
+                - password
+                - name
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: newuser@example.com
+                otp:
+                  type: string
+                  example: a1b2c3
+                password:
+                  type: string
+                  format: password
+                  example: Password123!
+                name:
+                  type: string
+                  example: New User
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email verified. Account created successfully.
+        '400':
+          description: Invalid or missing input (e.g., invalid OTP, email)
+        '401':
+          description: Invalid password format
+        '500':
+          description: Internal server error
+        '429':
+          description: Too many requests (rate-limited)
+
+  /changepassword:
+    post:
+      summary: Request OTP to change password
+      description: Validate old password and then send an OTP to proceed with password change.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, oldpassword]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                oldpassword:
+                  type: string
+                  format: password
+                  example: OldPassword123!
+      responses:
+        '200':
+          description: OTP sent to email
+        '400':
+          description: Missing details or incorrect old password
+        '404':
+          description: User not found
+        '429':
+          description: Too many requests (rate-limited)
+
+  /verify-cp:
+    post:
+      summary: Verify OTP to change password
+      description: After requesting OTP for password change, verify the OTP and update the password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, otp, newpassword]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                otp:
+                  type: string
+                  example: a1b2c3
+                newpassword:
+                  type: string
+                  format: password
+                  example: NewPassword123!
+      responses:
+        '200':
+          description: Password changed successfully
+        '400':
+          description: Invalid or expired OTP, or new password is invalid
+        '401':
+          description: Invalid password format
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+        '429':
+          description: Too many requests (rate-limited)
+
+  /forgotpassword:
+    post:
+      summary: Request OTP to reset password
+      description: Sends an OTP to user's email if they forgot their password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+      responses:
+        '200':
+          description: OTP sent
+        '400':
+          description: Invalid email or user not found
+        '429':
+          description: Too many requests (rate-limited)
+
+  /verify-fp:
+    post:
+      summary: Verify OTP and reset password
+      description: After receiving OTP via forgotpassword, verify OTP and reset password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, newpassword, otp]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                newpassword:
+                  type: string
+                  format: password
+                  example: NewPassword123!
+                otp:
+                  type: string
+                  example: a1b2c3
+      responses:
+        '200':
+          description: Password updated successfully
+        '400':
+          description: Invalid or expired OTP
+        '401':
+          description: Invalid password format
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+        '429':
+          description: Too many requests (rate-limited)
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: c8798112-66cc-4b7f-a0af-4f6d2f082022
+        username:
+          type: string
+          example: johndoe
+        email:
+          type: string
+          format: email
+          example: johndoe@example.com
+        password:
+          type: string
+          format: password
+          example: HashedPasswordString
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-12-01T12:34:56Z"
+      required:
+        - id
+        - username
+        - email
+        - password
+        - created_at
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
