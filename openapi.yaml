@@ -11,7 +11,7 @@ servers:
     description: Production Server
 
 paths:
-  /home:
+  /v1/home:
     get:
       summary: Access protected route
       description: Return a success message if the user is authenticated.
@@ -31,7 +31,7 @@ paths:
         '401':
           description: Unauthorized, missing or invalid token.
 
-  /login:
+  /v1/auth/login:
     post:
       summary: User Login
       description: Login with email and password to receive a JWT token.
@@ -76,7 +76,7 @@ paths:
         '429':
           description: Too many requests (rate-limited)
 
-  /signup/request-verification:
+  /v1/auth/signup/request-otp:
     post:
       summary: Request OTP for Signup
       description: Sends an OTP to user’s email for account creation.
@@ -110,7 +110,7 @@ paths:
         '429':
           description: Too many requests (rate-limited)
 
-  /signup/verify-otp:
+  /v1/auth/signup/verify-otp:
     post:
       summary: Verify OTP and create new account
       description: After receiving OTP, verify it and create a new `User`.
@@ -160,7 +160,7 @@ paths:
         '429':
           description: Too many requests (rate-limited)
 
-  /changepassword:
+  /v1/users/password/request-otp:
     post:
       summary: Request OTP to change password
       description: Validate old password and then send an OTP to proceed with password change.
@@ -190,7 +190,7 @@ paths:
         '429':
           description: Too many requests (rate-limited)
 
-  /verify-cp:
+  /v1/users/password/verify-otp:
     post:
       summary: Verify OTP to change password
       description: After requesting OTP for password change, verify the OTP and update the password.
@@ -227,7 +227,7 @@ paths:
         '429':
           description: Too many requests (rate-limited)
 
-  /forgotpassword:
+  /v1/users/password/reset/request-otp:
     post:
       summary: Request OTP to reset password
       description: Sends an OTP to user's email if they forgot their password.
@@ -251,7 +251,7 @@ paths:
         '429':
           description: Too many requests (rate-limited)
 
-  /verify-fp:
+  /v1/users/password/reset/verify-otp:
     post:
       summary: Verify OTP and reset password
       description: After receiving OTP via forgotpassword, verify OTP and reset password.

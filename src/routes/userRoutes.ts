@@ -13,22 +13,22 @@ import {
 
 const userRoute: Router = Router();
 
-// Protected routes
-userRoute.get('/home', authenticateToken, home);
+// Home Route (Protected)
+userRoute.get('/v1/home', authenticateToken, home);
 
-// Authentication routes with rateLimiter middlware where 5 = limit with windowseconds 30 = size
-userRoute.post('/login', rateLimiter(6, 30), login);
+// Authentication Routes
+userRoute.post('/v1/auth/login', rateLimiter(6, 30), login);
 
-// OTP-based routes to 'Sing-up'
-userRoute.post('/signup/request-verification', rateLimiter(3, 30), requestOtp); // Request OTP
-userRoute.post('/signup/verify-otp', rateLimiter(6, 30), verifyOtp); // Verify OTP and create account
+// OTP-Based Sign-Up Routes
+userRoute.post('/v1/auth/signup/request-otp', rateLimiter(3, 30), requestOtp);
+userRoute.post('/v1/auth/signup/verify-otp', rateLimiter(6, 30), verifyOtp);
 
-//OTP-based routes to 'Change Password'
-userRoute.post('/changepassword', rateLimiter(3, 30), changePassword); // Request OTP
-userRoute.post('/verify-cp', rateLimiter(6, 30), verifyOtpForChangePassword); // Verify OTP and change password
+// OTP-Based Change Password Routes
+userRoute.post('/v1/users/password/request-otp', rateLimiter(3, 30), changePassword);
+userRoute.post('/v1/users/password/verify-otp', rateLimiter(6, 30), verifyOtpForChangePassword);
 
-//OTP-based routes to 'Reset the Password'
-userRoute.post('/forgotpassword', rateLimiter(3, 30), forgotpassword); // Request OTP
-userRoute.post('/verify-fp', rateLimiter(6, 30), verifyOtpForgotPassword); // Verify OTP and reset password
+// OTP-Based Forgot Password Routes
+userRoute.post('/v1/users/password/reset/request-otp', rateLimiter(3, 30), forgotpassword);
+userRoute.post('/v1/users/password/reset/verify-otp', rateLimiter(6, 30), verifyOtpForgotPassword);
 
 export default userRoute;
