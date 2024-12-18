@@ -13,6 +13,7 @@ import { verifyingPassword } from '../utils /hashPassword';
 import { Prisma } from '@prisma/client';
 import { validateEmail } from '../middlewares/validateEmail';
 import { validateFields } from '../utils /validateFields';
+import { deleteCurrentToken } from '../redisCache';
 
 export const requestOtp = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -221,6 +222,8 @@ export const verifyOtpForChangePassword = async (
       data: { password: hashedPassword },
     });
 
+    await deleteCurrentToken(email);
+
     res.status(200).json({
       msg: 'Password Changed Succussfully',
     });
@@ -318,6 +321,8 @@ export const verifyOtpForgotPassword = async (req: Request, res: Response) => {
       where: { email: email },
       data: { password: hashedPassword },
     });
+
+    await deleteCurrentToken(email);
 
     res.status(200).json({
       msg: 'Password Updated Succussfully',

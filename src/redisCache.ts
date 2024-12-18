@@ -50,6 +50,18 @@ export const setNewToken = async (
   }
 };
 
+export const deleteCurrentToken = async(
+  user_id: string,
+): Promise<boolean> =>{
+  try{
+    await redisClient.del(`user:${user_id}`);
+    return true;
+  }catch(error){
+    console.log('Error in deleting current token', error);
+    return false;
+  }
+};
+
 export const setOtp = async (key: string, otp: string, ttl: number) => {
   await redisClient.setEx(key, ttl, otp);
 };
