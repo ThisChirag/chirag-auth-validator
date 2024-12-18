@@ -7,8 +7,8 @@ info:
     password reset, and protected routes.
 
 servers:
-  - url: http://localhost:8080/api
-    description: Local development server
+  - url: https://chiragcodes.com/api
+    description: Production Server
 
 paths:
   /home:
@@ -321,6 +321,6 @@ components:
 
   securitySchemes:
     bearerAuth:
-      type: http
+      type: https
       scheme: bearer
       bearerFormat: JWT
