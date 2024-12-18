@@ -12,14 +12,16 @@ import { validatePassword } from '../utils /validatePassword';
 import { verifyingPassword } from '../utils /hashPassword';
 import { Prisma } from '@prisma/client';
 import { validateEmail } from '../middlewares/validateEmail';
+import { validateFields } from '../utils /validateFields';
+
+
+
 
 export const requestOtp = async (req: Request, res: Response) => {
   const { email } = req.body;
 
-  if (!email) {
-    res.status(400).json({ message: 'Email is required' });
-    return;
-  }
+if(!validateFields({email}, res)) return;
+
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
     res.status(400).json({
@@ -66,13 +68,8 @@ export const requestOtp = async (req: Request, res: Response) => {
 export const verifyOtp = async (req: Request, res: Response) => {
   const { email, otp, password, name } = req.body;
 
-  if (!email || !otp || !password || !name) {
-    res
-      .status(400)
-      .json({ msg: 'Email, OTP, name, and password are required' });
-    return;
-  }
-
+if(!validateFields({email, otp, password, name}, res)) return;
+  
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
     res.status(400).json({
@@ -122,12 +119,8 @@ export const verifyOtp = async (req: Request, res: Response) => {
 export const changePassword = async (req: Request, res: Response) => {
   const { email, oldpassword } = req.body;
 
-  if (!email || !oldpassword) {
-    res.status(400).json({
-      msg: 'please provide all the details',
-    });
-    return;
-  }
+if(!validateFields({email, oldpassword}, res)) return;
+ 
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
     res.status(400).json({
@@ -171,12 +164,8 @@ export const verifyOtpForChangePassword = async (
 ) => {
   const { email, otp, newpassword } = req.body;
 
-  if (!email || !otp || !newpassword) {
-    res.status(400).json({
-      msg: 'please provide all the details',
-    });
-    return;
-  }
+  if(!validateFields({email, otp, newpassword}, res)) return;
+
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
     res.status(400).json({
@@ -251,12 +240,7 @@ export const verifyOtpForChangePassword = async (
 export const forgotpassword = async (req: Request, res: Response) => {
   const { email } = req.body;
 
-  if (!email) {
-    res.status(400).json({
-      msg: 'please enter the email',
-    });
-    return;
-  }
+if(!validateFields({email}, res)) return;
 
   const isEmailValid = await validateEmail(email);
 
@@ -291,15 +275,12 @@ export const forgotpassword = async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Verification OTP sent to your email' });
 };
 
+//
 export const verifyOtpForgotPassword = async (req: Request, res: Response) => {
   const { email, newpassword, otp } = req.body;
 
-  if (!email || !newpassword || !otp) {
-    res.status(400).json({
-      msg: 'Please provide all the details',
-    });
-    return;
-  }
+  if(!validateFields({email, otp, newpassword}, res)) return;
+
 
   const user_present = await prisma.user.findUnique({
     where: { email },
