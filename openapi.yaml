@@ -299,11 +299,11 @@ components:
           example: c8798112-66cc-4b7f-a0af-4f6d2f082022
         username:
           type: string
-          example: johndoe
+          example: chirag
         email:
           type: string
           format: email
-          example: johndoe@example.com
+          example: user@example.com
         password:
           type: string
           format: password
