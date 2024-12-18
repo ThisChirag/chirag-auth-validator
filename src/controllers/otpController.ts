@@ -14,13 +14,10 @@ import { Prisma } from '@prisma/client';
 import { validateEmail } from '../middlewares/validateEmail';
 import { validateFields } from '../utils /validateFields';
 
-
-
-
 export const requestOtp = async (req: Request, res: Response) => {
   const { email } = req.body;
 
-if(!validateFields({email}, res)) return;
+  if (!validateFields({ email }, res)) return;
 
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
@@ -68,8 +65,8 @@ if(!validateFields({email}, res)) return;
 export const verifyOtp = async (req: Request, res: Response) => {
   const { email, otp, password, name } = req.body;
 
-if(!validateFields({email, otp, password, name}, res)) return;
-  
+  if (!validateFields({ email, otp, password, name }, res)) return;
+
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
     res.status(400).json({
@@ -119,8 +116,8 @@ if(!validateFields({email, otp, password, name}, res)) return;
 export const changePassword = async (req: Request, res: Response) => {
   const { email, oldpassword } = req.body;
 
-if(!validateFields({email, oldpassword}, res)) return;
- 
+  if (!validateFields({ email, oldpassword }, res)) return;
+
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
     res.status(400).json({
@@ -164,7 +161,7 @@ export const verifyOtpForChangePassword = async (
 ) => {
   const { email, otp, newpassword } = req.body;
 
-  if(!validateFields({email, otp, newpassword}, res)) return;
+  if (!validateFields({ email, otp, newpassword }, res)) return;
 
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
@@ -240,7 +237,7 @@ export const verifyOtpForChangePassword = async (
 export const forgotpassword = async (req: Request, res: Response) => {
   const { email } = req.body;
 
-if(!validateFields({email}, res)) return;
+  if (!validateFields({ email }, res)) return;
 
   const isEmailValid = await validateEmail(email);
 
@@ -279,8 +276,7 @@ if(!validateFields({email}, res)) return;
 export const verifyOtpForgotPassword = async (req: Request, res: Response) => {
   const { email, newpassword, otp } = req.body;
 
-  if(!validateFields({email, otp, newpassword}, res)) return;
-
+  if (!validateFields({ email, otp, newpassword }, res)) return;
 
   const user_present = await prisma.user.findUnique({
     where: { email },

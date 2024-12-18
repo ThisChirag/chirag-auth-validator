@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Chirag Auth Validator API
-  version: "1.0.0"
+  version: '1.0.0'
   description: >
     A Node.js/Express-based API for user authentication, OTP-based verification, 
     password reset, and protected routes.
@@ -311,7 +311,7 @@ components:
         created_at:
           type: string
           format: date-time
-          example: "2023-12-01T12:34:56Z"
+          example: '2023-12-01T12:34:56Z'
       required:
         - id
         - username

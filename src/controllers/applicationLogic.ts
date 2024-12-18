@@ -1,9 +1,9 @@
-import {Response} from 'express';
-import {generateToken} from '../utils /GeneratorLogic';
-import {AuthReq} from '../middlewares/authenticateToken';
+import { Response } from 'express';
+import { generateToken } from '../utils /GeneratorLogic';
+import { AuthReq } from '../middlewares/authenticateToken';
 import { verifyingPassword } from '../utils /hashPassword';
 import prisma from '../utils /prisma';
-import {setNewToken, connectReddis} from '../redisCache';
+import { setNewToken, connectReddis } from '../redisCache';
 import { validateFields } from '../utils /validateFields';
 
 connectReddis();
@@ -30,8 +30,7 @@ export const home = async (req: AuthReq, res: Response) => {
 export const login = async (req: AuthReq, res: Response) => {
   const { email, password } = req.body;
 
-  if(!validateFields({email, password}, res)) return;
-  
+  if (!validateFields({ email, password }, res)) return;
 
   const user_present = await prisma.user.findUnique({
     where: { email },
