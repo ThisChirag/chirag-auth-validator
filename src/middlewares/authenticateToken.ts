@@ -7,10 +7,12 @@ import { getTokenFromUser_Id } from '../redisCache';
 
 dotenv.config();
 
-const secretKey = process.env.SECRET_KEY || 'testing authentication';
+const secretKey = process.env.SECRET_KEY;
+
 
 export interface AuthReq extends Request {
-  user?: TokenPayload;
+  user? : TokenPayload;
+
 }
 
 const verifyPromise = (token: any, secretKey: any): Promise<TokenPayload> => {
@@ -41,10 +43,9 @@ export const authenticateToken = async (
 
   try {
     const user = await verifyPromise(token, secretKey);
-    const email = user.email;
     const activeToken = await getTokenFromUser_Id(user.user_Id);
     const isPresent = await prisma.user.findUnique({
-      where: { email },
+      where: { id: user.user_Id },
     });
 
     if (!isPresent) {
@@ -62,10 +63,9 @@ export const authenticateToken = async (
     req.user = user;
     next();
   } catch (error) {
-    next(
-      res.status(401).json({
-        msg: 'Token is invalid, please login',
-      }),
-    );
+    res.status(401).json({
+      msg: "Token is invalid, please login"
+    });
+    return;
   }
 };

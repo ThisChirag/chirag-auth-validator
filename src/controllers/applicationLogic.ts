@@ -9,6 +9,8 @@ import { validateFields } from '../utils /validateFields';
 connectReddis();
 
 const saltRounds = parseInt(process.env.SALT_ROUNDS ?? '10');
+const jwt_expiration = (parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION!))/3600;
+
 
 // "/api/home" protected route logic
 export const home = async (req: AuthReq, res: Response) => {
@@ -51,7 +53,7 @@ export const login = async (req: AuthReq, res: Response) => {
     await setNewToken(user_id, newToken, 3600);
 
     res.status(200).json({
-      msg: 'Login Succussful, token is valid for 1 hour',
+      msg: `Login Succussful, token is valid for ${jwt_expiration} hour`,
       newToken: newToken,
     });
     return;
