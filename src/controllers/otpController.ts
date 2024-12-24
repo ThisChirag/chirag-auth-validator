@@ -67,7 +67,7 @@ export const requestOtp = async (req: Request, res: Response) => {
 export const verifyOtp = async (req: Request, res: Response) => {
   const {name, username, email, password, otp} = req.body
 
-  if (!validateFields({ email, otp, password, name, username}, res)) return;
+  if (!validateFields({ email, otp, password, name}, res)) return;
 
   const usernameExist = await checkUsernameExistence(username, res);
 
@@ -132,7 +132,7 @@ export const changePassword = async (req: Request, res: Response) => {
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
     res.status(400).json({
-      msg: 'Wrong email enter the correct email address',
+      msg: 'Wrong email, enter the correct email address',
     });
     return;
   }
@@ -177,7 +177,7 @@ export const verifyOtpForChangePassword = async (
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
     res.status(400).json({
-      msg: 'Wrong format, please enter the mail you want to verify the otp for',
+      msg: 'Wrong email format, please enter correct mail address you want to verify the otp for',
     });
     return;
   }

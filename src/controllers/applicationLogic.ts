@@ -60,7 +60,7 @@ export const login = async (req: AuthenticatedRequest, res: Response) => {
     }
     const passwordIsValid = await verifyingPassword(password, user.password);
     if (!passwordIsValid) {
-       res.status(401).json({ msg: 'Wrong email or password' });
+       res.status(401).json({ msg: 'Wrong email/username or password' });
        return;
     }
 

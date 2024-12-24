@@ -12,7 +12,7 @@ externalDocs:
   url: "https://github.com/ThisChirag/chirag-auth-validator"
 
 servers:
-  - url: http://localhost:8080/api
+  - url: https://chiragcodes.com/api
     description: Production Server
 
 paths:
@@ -37,58 +37,116 @@ paths:
           description: Unauthorized, missing or invalid token.
 
   /v1/auth/login:
-  post:
-    summary: User Login
-    description: Login with `email_or_username` (which can be an email address or username) and a password to receive a JWT token.
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              email_or_username:
-                type: string
-                example: user@example.com
-                description: Email or username field (cannot be empty).
-              password:
-                type: string
-                format: password
-                example: Password123!
-                description: User password (cannot be empty).
-            required:
-              - email_or_username
-              - password
-    responses:
-      '200':
-        description: Login successful, returns JWT token
+    post:
+      summary: User Login
+      description: Login with `email_or_username` (which can be an email address or username) and a password to receive a JWT token.
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                msg:
+                email_or_username:
                   type: string
-                  example: Login Successful, token is valid for 1 hour
-                newToken:
+                  example: your_email or user123
+                  description: Email or username field (cannot be empty).
+                password:
                   type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-      '400':
-        description: Missing email_or_username or password
+                  format: password
+                  example: Password123!
+                  description: User password (cannot be empty).
+              required:
+                - email_or_username
+                - password
+      responses:
+        '200':
+          description: Login successful, returns JWT token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Login Successful, token is valid for 1 hour
+                  newToken:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '400':
+          description: Missing email_or_username or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: email or username field cannot be empty
+        '401':
+          description: Wrong email_or_username or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Wrong email_or_username or password
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: User not found
+        '429':
+          description: Too many requests (rate-limited)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Too many requests, please try again later.
+
+  /v1/auth/signup/request-otp:
+    post:
+      summary: Request OTP for Signup
+      description: Sends an OTP to user’s email for account creation.
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required: [email]
               properties:
-                msg:
+                email:
                   type: string
-                  example: email or username field cannot be empty
-      '401':
-        description: Wrong email_or_username or password
-      '404':
-        description: User not found
-      '429':
-        description: Too many requests (rate-limited)
+                  format: email
+                  example: your-email
+      responses:
+        '200':
+          description: OTP sent to email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Verification OTP sent to your email
+        '400':
+          description: Invalid email or domain
+        '409':
+          description: User already exists
+        '429':
+          description: Too many requests (rate-limited)
 
   /v1/auth/signup/verify-otp:
     post:
@@ -105,11 +163,12 @@ paths:
                 - otp
                 - password
                 - name
+                - username
               properties:
                 email:
                   type: string
                   format: email
-                  example: newuser@example.com
+                  example: your_email
                 otp:
                   type: string
                   example: a1b2c3
@@ -120,6 +179,9 @@ paths:
                 name:
                   type: string
                   example: New User
+                username:
+                  type: string
+                  example: chirag123
       responses:
         '201':
           description: Account created
@@ -133,12 +195,44 @@ paths:
                     example: Email verified. Account created successfully.
         '400':
           description: Invalid or missing input (e.g., invalid OTP, email)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Invalid or missing input
         '401':
           description: Invalid password format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Invalid password format
         '500':
           description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Internal server error
         '429':
           description: Too many requests (rate-limited)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Too many requests, please try again later.
 
   /v1/users/password/request-otp:
     post:
@@ -155,7 +249,7 @@ paths:
                 email:
                   type: string
                   format: email
-                  example: user@example.com
+                  example: your_email
                 oldpassword:
                   type: string
                   format: password
@@ -163,12 +257,44 @@ paths:
       responses:
         '200':
           description: OTP sent to email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: OTP sent to your email
         '400':
           description: Missing details or incorrect old password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Missing details or incorrect old password
         '404':
           description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: User not found
         '429':
           description: Too many requests (rate-limited)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Too many requests, please try again later.
 
   /v1/users/password/verify-otp:
     post:
@@ -185,7 +311,7 @@ paths:
                 email:
                   type: string
                   format: email
-                  example: user@example.com
+                  example: your_email
                 otp:
                   type: string
                   example: a1b2c3
@@ -196,16 +322,64 @@ paths:
       responses:
         '200':
           description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Password changed successfully
         '400':
           description: Invalid or expired OTP, or new password is invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Invalid or expired OTP, or new password is invalid
         '401':
           description: Invalid password format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Invalid password format
         '404':
           description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: User not found
         '500':
           description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Internal server error
         '429':
           description: Too many requests (rate-limited)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Too many requests, please try again later.
 
   /v1/users/password/reset/request-otp:
     post:
@@ -222,19 +396,43 @@ paths:
                 email:
                   type: string
                   format: email
-                  example: user@example.com
+                  example: your_email
       responses:
         '200':
           description: OTP sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: OTP sent to your email
         '400':
           description: Invalid email or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Invalid email or user not found
         '429':
           description: Too many requests (rate-limited)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Too many requests, please try again later.
 
   /v1/users/password/reset/verify-otp:
     post:
       summary: Verify OTP and reset password
-      description: After receiving OTP via forgotpassword, verify OTP and reset password.
+      description: After receiving OTP via forgot password, verify OTP and reset password.
       requestBody:
         required: true
         content:
@@ -246,27 +444,75 @@ paths:
                 email:
                   type: string
                   format: email
-                  example: user@example.com
+                  example: your_email
+                otp:
+                  type: string
+                  example: a1b2c3
                 newpassword:
                   type: string
                   format: password
                   example: NewPassword123!
-                otp:
-                  type: string
-                  example: a1b2c3
       responses:
         '200':
           description: Password updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Password updated successfully
         '400':
-          description: Invalid or expired OTP
+          description: Invalid or expired OTP, or new password is invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Invalid or expired OTP, or new password is invalid
         '401':
           description: Invalid password format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Invalid password format
         '404':
           description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: User not found
         '500':
           description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Internal server error
         '429':
           description: Too many requests (rate-limited)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Too many requests, please try again later.
 
 components:
   schemas:
@@ -283,7 +529,7 @@ components:
         email:
           type: string
           format: email
-          example: user@example.com
+          example: your_email
         password:
           type: string
           format: password
