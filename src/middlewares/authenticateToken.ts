@@ -1,24 +1,27 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { TokenPayload } from '../utils /GeneratorLogic';
+import { TokenPayload } from '../utils /JWTGeneratorLogic';
 import prisma from '../utils /prisma';
 import { getTokenFromUser_Id } from '../redisCache';
 
 dotenv.config();
 
-const secretKey = process.env.SECRET_KEY;
+const secretKey = process.env.JWT_SECRET || 'YzW7XGn6vPaUZX6ay2p9r9zly26WGoA4ZHv6QSt1D/c=';
 
-
-export interface AuthReq extends Request {
-  user? : TokenPayload;
-
+export interface AuthenticatedRequest extends Request {
+  user?: {
+    name:string;
+    email:string;
+    username:string;
+    id:string;
+  }
 }
 
-const verifyPromise = (token: any, secretKey: any): Promise<TokenPayload> => {
+const verifyPromise = (token: string, secret: string): Promise<TokenPayload> => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, secretKey, (err: any, decode: any) => {
-      if (!decode) {
+    jwt.verify(token, secret, (err, decode) => {
+      if (err || !decode) {
         reject(err);
       }
       resolve(decode as TokenPayload);
@@ -27,44 +30,56 @@ const verifyPromise = (token: any, secretKey: any): Promise<TokenPayload> => {
 };
 
 export const authenticateToken = async (
-  req: AuthReq,
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const authToken = req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
-  if (!authToken) {
+  if (!authHeader) {
     res.status(401).json({
-      msg: 'Unauthorized, Token not provided.. Please Create Account or login',
+      msg: 'Unauthorized: Token not provided. Please create an account or login.',
     });
     return;
   }
-  const token = authToken && authToken.split(' ')[1];
+  const token = authHeader && authHeader.split(' ')[1];
 
-  try {
-    const user = await verifyPromise(token, secretKey);
-    const activeToken = await getTokenFromUser_Id(user.user_Id);
-    const isPresent = await prisma.user.findUnique({
-      where: { id: user.user_Id },
+  if (!token) {
+    res.status(401).json({
+      msg: 'Unauthorized: Token not provided. Please create an account or login.',
     });
+    return;
+  }
+  try {
+    const decode_tokenDetails = await verifyPromise(token, secretKey);
 
-    if (!isPresent) {
-      res.status(404).json({
-        msg: 'user not found',
+    if (!decode_tokenDetails.sub) {
+      throw new Error('Token missing subject');
+    }
+    const activeToken = await getTokenFromUser_Id(decode_tokenDetails.sub);
+    if (!activeToken || activeToken !== token) {
+      res.status(401).json({
+        msg: 'Token expired or invalid. Please login again.',
       });
       return;
     }
-    if (!activeToken || activeToken !== token) {
-      res.status(401).json({
-        msg: 'Token expired, please login again',
+
+    const user = await prisma.user.findUnique({
+      where: { id: decode_tokenDetails.sub },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        msg: 'User not found.',
       });
       return;
     }
     req.user = user;
     next();
   } catch (error) {
+    console.error('Authentication error:', error);
     res.status(401).json({
-      msg: "Token is invalid, please login"
+      msg: 'Invalid or expired token. Please login.',
     });
     return;
   }

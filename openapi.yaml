@@ -6,8 +6,13 @@ info:
     A Node.js/Express-based API for user authentication, OTP-based verification, 
     password reset, and protected routes.
 
+# External documentation link (GitHub repo)
+externalDocs:
+  description: GitHub Repository
+  url: "https://github.com/ThisChirag/chirag-auth-validator"
+
 servers:
-  - url: https://chiragcodes.com/api
+  - url: http://localhost:8080/api
     description: Production Server
 
 paths:
@@ -32,83 +37,58 @@ paths:
           description: Unauthorized, missing or invalid token.
 
   /v1/auth/login:
-    post:
-      summary: User Login
-      description: Login with email and password to receive a JWT token.
-      requestBody:
-        required: true
+  post:
+    summary: User Login
+    description: Login with `email_or_username` (which can be an email address or username) and a password to receive a JWT token.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email_or_username:
+                type: string
+                example: user@example.com
+                description: Email or username field (cannot be empty).
+              password:
+                type: string
+                format: password
+                example: Password123!
+                description: User password (cannot be empty).
+            required:
+              - email_or_username
+              - password
+    responses:
+      '200':
+        description: Login successful, returns JWT token
         content:
           application/json:
             schema:
               type: object
-              required:
-                - email
-                - password
               properties:
-                email:
+                msg:
                   type: string
-                  format: email
-                  example: user@example.com
-                password:
+                  example: Login Successful, token is valid for 1 hour
+                newToken:
                   type: string
-                  format: password
-                  example: Password123!
-      responses:
-        '200':
-          description: Login successful, returns JWT token
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  msg:
-                    type: string
-                    example: Login Successful, token is valid for 1 hour
-                  newToken:
-                    type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        '400':
-          description: Missing credentials
-        '401':
-          description: Wrong email or password
-        '404':
-          description: User not found
-        '429':
-          description: Too many requests (rate-limited)
-
-  /v1/auth/signup/request-otp:
-    post:
-      summary: Request OTP for Signup
-      description: Sends an OTP to user’s email for account creation.
-      requestBody:
-        required: true
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      '400':
+        description: Missing email_or_username or password
         content:
           application/json:
             schema:
               type: object
-              required: [email]
               properties:
-                email:
+                msg:
                   type: string
-                  format: email
-                  example: newuser@example.com
-      responses:
-        '200':
-          description: OTP sent to email
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Verification OTP sent to your email
-        '400':
-          description: Invalid email or domain
-        '409':
-          description: User already exists
-        '429':
-          description: Too many requests (rate-limited)
+                  example: email or username field cannot be empty
+      '401':
+        description: Wrong email_or_username or password
+      '404':
+        description: User not found
+      '429':
+        description: Too many requests (rate-limited)
 
   /v1/auth/signup/verify-otp:
     post:
@@ -311,7 +291,7 @@ components:
         created_at:
           type: string
           format: date-time
-          example: '2023-12-01T12:34:56Z'
+          example: '2025-01-01T12:34:56Z'
       required:
         - id
         - username

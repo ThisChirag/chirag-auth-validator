@@ -1,10 +1,10 @@
 import { Response } from 'express';
-import { generateToken } from '../utils /GeneratorLogic';
-import { AuthReq } from '../middlewares/authenticateToken';
+import { generateToken } from '../utils /JWTGeneratorLogic';
+import { AuthenticatedRequest } from '../middlewares/authenticateToken';
 import { verifyingPassword } from '../utils /hashPassword';
 import prisma from '../utils /prisma';
 import { setNewToken, connectReddis } from '../redisCache';
-import { validateFields } from '../utils /validateFields';
+
 
 connectReddis();
 
@@ -12,10 +12,9 @@ const saltRounds = parseInt(process.env.SALT_ROUNDS ?? '10');
 const jwt_expiration = (parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION!))/3600;
 
 
-// "/api/home" protected route logic
-export const home = async (req: AuthReq, res: Response) => {
+export const home = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { name, email, user_Id } = req.user!;
+    const { name, email, id } = req.user!;
     res.status(200).json({
       message:
         'You are in /api/home route and have succussfully setup the authentication',
@@ -28,38 +27,56 @@ export const home = async (req: AuthReq, res: Response) => {
   }
 };
 
-// "/api/login" route logic
-export const login = async (req: AuthReq, res: Response) => {
-  const { email, password } = req.body;
+export const login = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { email_or_username, password } = req.body;
 
-  if (!validateFields({ email, password }, res)) return;
+    if(!email_or_username){
+      res.status(400).json({
+        msg: "email or username field cannot be empty",
+      })
+      return;
+    }
 
-  const user_present = await prisma.user.findUnique({
-    where: { email },
-  });
-  if (!user_present) {
-    res.status(404).json({
-      msg: 'user not found',
+    if(!password){
+      res.status(400).json({
+        msg: "password cannot be empty",
+      })
+      return;
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: email_or_username },
+          { username: email_or_username },
+        ],
+      },
     });
-    return;
-  }
-  const hashedPassword = user_present?.password;
-  const verifyPass = await verifyingPassword(password, hashedPassword);
 
-  if (user_present && verifyPass) {
-    const name = user_present.username;
-    const user_id = user_present.id;
-    const newToken = generateToken(name, email, user_id);
-    await setNewToken(user_id, newToken, 3600);
+    if (!user) {
+       res.status(404).json({ msg: 'User not found' });
+       return;
+    }
+    const passwordIsValid = await verifyingPassword(password, user.password);
+    if (!passwordIsValid) {
+       res.status(401).json({ msg: 'Wrong email or password' });
+       return;
+    }
+
+    const userId = user.id;
+    const newToken = generateToken(userId);
+
+    await setNewToken(userId, newToken, 3600);
 
     res.status(200).json({
-      msg: `Login Succussful, token is valid for ${jwt_expiration} hour`,
-      newToken: newToken,
+      msg: `Login Successful, token is valid for ${jwt_expiration} hour(s)`,
+      newToken,
     });
     return;
-  } else {
-    res.status(401).json({
-      msg: 'Wrong email or password',
-    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ msg: 'Internal server error' });
+    return;
   }
 };

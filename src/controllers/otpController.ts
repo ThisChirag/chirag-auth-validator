@@ -14,6 +14,7 @@ import { Prisma } from '@prisma/client';
 import { validateEmail } from '../middlewares/validateEmail';
 import { validateFields } from '../utils /validateFields';
 import { deleteCurrentToken } from '../redisCache';
+import { checkUsernameExistence } from '../services/checkUsername';
 
 export const requestOtp = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -64,9 +65,18 @@ export const requestOtp = async (req: Request, res: Response) => {
 
 //Verify OTP and create user account
 export const verifyOtp = async (req: Request, res: Response) => {
-  const { email, otp, password, name } = req.body;
+  const {name, username, email, password, otp} = req.body
 
-  if (!validateFields({ email, otp, password, name }, res)) return;
+  if (!validateFields({ email, otp, password, name, username}, res)) return;
+
+  const usernameExist = await checkUsernameExistence(username, res);
+
+  if(usernameExist == true){
+    res.status(400).json({
+      msg: "Username already exists, please choose a different username",
+    })
+    return;
+  }
 
   const isEmailValid = validateEmail(email);
   if (!isEmailValid) {
@@ -101,7 +111,7 @@ export const verifyOtp = async (req: Request, res: Response) => {
   try {
     // Create user in the database
     const user = await prisma.user.create({
-      data: { username: name, email, password: hashedPassword },
+      data: { username, email, password: hashedPassword, name },
     });
 
     res
