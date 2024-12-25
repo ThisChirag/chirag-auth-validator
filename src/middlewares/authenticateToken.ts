@@ -8,7 +8,7 @@ import { getTokenFromUser_Id } from '../redisCache';
 dotenv.config();
 
 const secretKey =
-  process.env.JWT_SECRET || 'YzW7XGn6vPaUZX6ay2p9r9zly26WGoA4ZHv6QSt1D/c=';
+  process.env.JWT_SECRET!;
 
 export interface AuthenticatedRequest extends Request {
   user?: {

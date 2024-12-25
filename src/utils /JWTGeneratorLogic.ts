@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const secretKey = process.env.JWT_SECRET || 'just_testing';
+const secretKey = process.env.JWT_SECRET!;
 const jwtTTL = parseInt(process.env.JWT_TTL || '3600');
 const issuer = process.env.JWT_ISSUER!;
 const audience = process.env.JWT_AUDIENCE!;
