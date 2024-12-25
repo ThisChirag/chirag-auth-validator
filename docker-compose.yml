@@ -7,11 +7,11 @@ services:
     container_name: chirag-auth-validator-app-dev
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
-      DATABASE_URL: "postgresql://postgres:mysecretpassword@postgres:5432/postgres?schema=public"
-      REDIS_URL: "redis://redis:6379"
-      NODE_ENV: "development"
+      DATABASE_URL: 'postgresql://postgres:mysecretpassword@postgres:5432/postgres?schema=public'
+      REDIS_URL: 'redis://redis:6379'
+      NODE_ENV: 'development'
     depends_on:
       - postgres
       - redis
@@ -28,7 +28,7 @@ services:
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -37,7 +37,7 @@ services:
     container_name: chirag-auth-validator-redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_data:/data
 

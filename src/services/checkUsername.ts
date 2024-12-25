@@ -12,10 +12,10 @@ export const checkUsernameExistence = async (
     if (usernameExist) return true;
     return false;
   } catch (err) {
-      res.status(500).json({
-        msg: 'An unexpected error occurred.',
-        error: err,
-      });
-      return;
+    res.status(500).json({
+      msg: 'An unexpected error occurred.',
+      error: err,
+    });
+    return;
   }
 };

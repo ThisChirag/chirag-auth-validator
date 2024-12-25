@@ -1,12 +1,13 @@
 # Security Policy
 
 ## Supported Versions
+
 We actively support and accept vulnerability reports for the following versions:
 
-| Version | Supported          |
-|---------|--------------------|
-| 1.x     | ✅                |
-| < 1.x   | ❌ (unsupported)  |
+| Version | Supported        |
+| ------- | ---------------- |
+| 1.x     | ✅               |
+| < 1.x   | ❌ (unsupported) |
 
 ---
 
@@ -19,9 +20,10 @@ If you discover a security vulnerability in this project, please follow these st
 
 2. **Report via Email:**  
    Send an email to **chirag@chiragcodes.com** with the subject line:  
-   **[Security Report] <Issue Summary>**  
+   **[Security Report] <Issue Summary>**
 
    Include the following details:
+
    - A description of the vulnerability.
    - Steps to reproduce the issue (if applicable).
    - Any potential impact.
@@ -39,12 +41,14 @@ If you discover a security vulnerability in this project, please follow these st
 ## Scope of Security Reports
 
 ### In Scope:
+
 - Authentication and authorization flaws.
 - Code injection (e.g., SQL, command, or script injection).
 - Data leakage or sensitive information exposure.
 - Cross-Site Scripting (XSS), CSRF, and related vulnerabilities.
 
 ### Out of Scope:
+
 - General bugs unrelated to security.
 - Vulnerabilities in third-party dependencies (report these to the respective maintainers).
 

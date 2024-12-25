@@ -17,7 +17,6 @@ app.use('/docs', docsRouter);
 
 app.use(syntaxError);
 
-// Default error handler (if needed)
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ message: 'Internal Server Error' });
 });
