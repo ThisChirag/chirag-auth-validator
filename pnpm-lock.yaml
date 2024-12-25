@@ -25,6 +25,9 @@ importers:
       axios:
         specifier: ^1.7.9
         version: 1.7.9
+      bcrypt:
+        specifier: ^5.1.1
+        version: 5.1.1
       dns:
         specifier: ^0.2.2
         version: 0.2.2
@@ -89,9 +92,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^8.18.2
         version: 8.18.2(eslint@9.17.0)(typescript@5.7.2)
-      bcrypt:
-        specifier: ^5.1.1
-        version: 5.1.1
       eslint:
         specifier: ^9.17.0
         version: 9.17.0
