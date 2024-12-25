@@ -1,5 +1,4 @@
 import prisma from '../utils /prisma';
-import { Prisma } from '@prisma/client';
 import { Response } from 'express';
 
 export const checkUsernameExistence = async (
@@ -13,16 +12,10 @@ export const checkUsernameExistence = async (
     if (usernameExist) return true;
     return false;
   } catch (err) {
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      res.status(500).json({
-        msg: 'Database error while checking username existence.',
-        error: err.message,
-      });
-    } else {
       res.status(500).json({
         msg: 'An unexpected error occurred.',
         error: err,
       });
-    }
+      return;
   }
 };

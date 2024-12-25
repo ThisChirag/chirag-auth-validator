@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { Prisma } from '@prisma/client';
 import prisma from '../utils /prisma';
 import { validateFields } from '../utils /validateFields';
 import { validateEmailDomain } from '../utils /validateDomain';
@@ -102,11 +101,8 @@ export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
       .status(201)
       .json({ msg: 'Email verified. Account created successfully.' });
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      res.status(500).json({ msg: 'Database error' });
-      return;
-    }
     res.status(500).json({ msg: 'Internal server error' });
+    return;
   }
 };
 
@@ -191,11 +187,8 @@ export const verifyOtpForChangePassword = async (
     });
     res.status(200).json({ msg: 'Password changed successfully' });
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      res.status(500).json({ msg: 'Database error occurred' });
-      return;
-    }
     res.status(500).json({ msg: 'Unexpected error' });
+    return;
   }
 };
 
@@ -267,10 +260,7 @@ export const verifyOtpForgotPassword = async (
     });
     res.status(200).json({ msg: 'Password updated successfully' });
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      res.status(500).json({ msg: 'Database error occurred' });
-      return;
-    }
     res.status(500).json({ msg: 'Unexpected error' });
+    return;
   }
 };
