@@ -7,18 +7,22 @@ import { getTokenFromUser_Id } from '../redisCache';
 
 dotenv.config();
 
-const secretKey = process.env.JWT_SECRET || 'YzW7XGn6vPaUZX6ay2p9r9zly26WGoA4ZHv6QSt1D/c=';
+const secretKey =
+  process.env.JWT_SECRET || 'YzW7XGn6vPaUZX6ay2p9r9zly26WGoA4ZHv6QSt1D/c=';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
-    name:string;
-    email:string;
-    username:string;
-    id:string;
-  }
+    name: string;
+    email: string;
+    username: string;
+    id: string;
+  };
 }
 
-const verifyPromise = (token: string, secret: string): Promise<TokenPayload> => {
+const verifyPromise = (
+  token: string,
+  secret: string,
+): Promise<TokenPayload> => {
   return new Promise((resolve, reject) => {
     jwt.verify(token, secret, (err, decode) => {
       if (err || !decode) {

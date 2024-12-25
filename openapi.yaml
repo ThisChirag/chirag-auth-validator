@@ -9,7 +9,7 @@ info:
 # External documentation link (GitHub repo)
 externalDocs:
   description: GitHub Repository
-  url: "https://github.com/ThisChirag/chirag-auth-validator"
+  url: 'https://github.com/ThisChirag/chirag-auth-validator'
 
 servers:
   - url: https://chiragcodes.com/api
@@ -203,6 +203,8 @@ paths:
                   msg:
                     type: string
                     example: Invalid or missing input
+        '409':
+          description: User already exists
         '401':
           description: Invalid password format
           content:

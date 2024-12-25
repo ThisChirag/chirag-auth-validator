@@ -5,12 +5,10 @@ import { verifyingPassword } from '../utils /hashPassword';
 import prisma from '../utils /prisma';
 import { setNewToken, connectReddis } from '../redisCache';
 
-
 connectReddis();
 
-const saltRounds = parseInt(process.env.SALT_ROUNDS ?? '10');
-const jwt_expiration = (parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION!))/3600;
-
+const jwt_expiration =
+  parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION!) / 3600;
 
 export const home = async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -31,37 +29,34 @@ export const login = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { email_or_username, password } = req.body;
 
-    if(!email_or_username){
+    if (!email_or_username) {
       res.status(400).json({
-        msg: "email or username field cannot be empty",
-      })
+        msg: 'email or username field cannot be empty',
+      });
       return;
     }
 
-    if(!password){
+    if (!password) {
       res.status(400).json({
-        msg: "password cannot be empty",
-      })
+        msg: 'password cannot be empty',
+      });
       return;
     }
 
     const user = await prisma.user.findFirst({
       where: {
-        OR: [
-          { email: email_or_username },
-          { username: email_or_username },
-        ],
+        OR: [{ email: email_or_username }, { username: email_or_username }],
       },
     });
 
     if (!user) {
-       res.status(404).json({ msg: 'User not found' });
-       return;
+      res.status(404).json({ msg: 'User not found' });
+      return;
     }
     const passwordIsValid = await verifyingPassword(password, user.password);
     if (!passwordIsValid) {
-       res.status(401).json({ msg: 'Wrong email/username or password' });
-       return;
+      res.status(401).json({ msg: 'Wrong email/username or password' });
+      return;
     }
 
     const userId = user.id;

@@ -5,16 +5,19 @@ dotenv.config();
 
 const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const otp_ttl = parseInt(process.env.OTP_TTL ?? '300') / 60;
 
 if (!RESEND_API_KEY) {
-  throw new Error("RESEND_API_KEY is not defined in the environment variables.");
+  throw new Error(
+    'RESEND_API_KEY is not defined in the environment variables.',
+  );
 }
 
 const resend = new Resend(RESEND_API_KEY);
 
 export const sendVerificationEmail = async (
   email: string,
-  otp: string
+  otp: string,
 ): Promise<boolean> => {
   try {
     const { data, error } = await resend.emails.send({
@@ -25,7 +28,7 @@ export const sendVerificationEmail = async (
         <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
           <h2 style="color: #555;">Verify Your Email</h2>
           <p>Your OTP is: <strong style="color: #2d89ef;">${otp}</strong></p>
-          <p>This OTP is valid for <strong>5 minutes</strong>.</p>
+          <p>This OTP is valid for <strong>${otp_ttl}</strong>.</p>
           <p>If you did not request this, please ignore this email.</p>
         </div>
       `,

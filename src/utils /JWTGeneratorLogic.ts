@@ -3,30 +3,29 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 const secretKey = process.env.JWT_SECRET || 'just_testing';
-const jwtTTL = parseInt(process.env.JWT_TTL || '3600'); 
-const issuer = process.env.JWT_ISSUER!
-const audience = process.env.JWT_AUDIENCE!
+const jwtTTL = parseInt(process.env.JWT_TTL || '3600');
+const issuer = process.env.JWT_ISSUER!;
+const audience = process.env.JWT_AUDIENCE!;
 
 interface GenerateTokenOptions {
-  secret?: string;      
-  ttl?: number;        
-  issuer?: string;     
-  audience?: string;   
+  secret?: string;
+  ttl?: number;
+  issuer?: string;
+  audience?: string;
 }
 
 export interface TokenPayload {
-  sub: string;          
-  iat: number;          
-  exp: number;          
-  iss: string;          
-  aud: string;          
+  sub: string;
+  iat: number;
+  exp: number;
+  iss: string;
+  aud: string;
 }
 
 export const generateToken = (
   userId: string,
-  options: GenerateTokenOptions = {}
+  options: GenerateTokenOptions = {},
 ): string => {
   const {
     secret = secretKey,
@@ -35,7 +34,7 @@ export const generateToken = (
     audience: tokenAudience = audience,
   } = options;
 
-  const now = Math.floor(Date.now() / 1000); 
+  const now = Math.floor(Date.now() / 1000);
   const payload: TokenPayload = {
     sub: userId,
     iat: now,
