@@ -62,12 +62,21 @@ A robust Node.js/TypeScript authentication system providing:
    ```bash
    cp .env.example .env
    ```
-2. **Fill in the required fields:**
+2. **Set the Environment Mode:**
+   - For development:
+     ```dotenv
+     NODE_ENV="development"
+     ```
+   - For production:
+     ```dotenv
+     NODE_ENV="production"
+     ```
+3. **Fill in the required fields:**
    - `DATABASE_URL`: Connection string for PostgreSQL.  
    - `REDIS_URL`: Connection string for Redis.  
    - `JWT_SECRET`: Secret key for JWT tokens.  
    - `RESEND_API_KEY`: API key for Resend email service.  
-3. **Keep `.env` private:**  
+4. **Keep `.env` private:**  
    - Ensure `.env` is listed in `.gitignore` to avoid committing sensitive data.
 
 ---
@@ -120,8 +129,6 @@ A robust Node.js/TypeScript authentication system providing:
 
 ## 🐳 Docker Deployment
 
-If you prefer to run everything inside Docker containers, follow these steps.
-
 ### Using Docker Compose
 
 Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and your application) together.
@@ -134,20 +141,24 @@ Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and yo
    REDIS_URL="redis://redis:6379"
    ```
 
-2. **Run the Containers**
+2. **Make the Entrypoint Script Executable**
+   Ensure the `docker-entrypoint.sh` file is executable:
+   ```bash
+   chmod +x docker-entrypoint.sh
+   ```
+
+3. **Run the Containers**
    ```bash
    docker-compose up --build -d
    ```
-   - **`--build`**: Rebuilds the Docker images based on the `Dockerfile`.
-   - **`-d`**: Runs the containers in detached mode.
 
-3. **Apply Prisma Migrations**
+4. **Apply Prisma Migrations**
    ```bash
-   docker-compose exec app npx prisma migrate dev
-   docker-compose exec app npx prisma generate
+   docker-compose exec app pnpm prisma migrate deploy
+   docker-compose exec app pnpm prisma generate
    ```
 
-4. **Verify the Setup**
+5. **Verify the Setup**
    - **Check Logs (Optional):**
      ```bash
      docker-compose logs -f app
@@ -167,7 +178,7 @@ Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and yo
 
 ---
 
-## 🔜 Scripts & Commands
+## 🚜 Scripts & Commands
 
 | Command                           | Description                                                      |
 |-----------------------------------|------------------------------------------------------------------|
@@ -177,10 +188,9 @@ Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and yo
 | `pnpm run lint`                   | Run ESLint checks                                                |
 | `pnpm run lint:fix`               | Autofix lint errors where possible                               |
 | `pnpm run format`                 | Format code with Prettier                                        |
-| `npx prisma migrate dev`          | Apply DB migrations in dev environment                           |
-| `npx prisma generate`             | Re-generate Prisma client                                        |
+| `pnpm prisma migrate deploy`      | Apply DB migrations in production                                |
+| `pnpm prisma generate`            | Re-generate Prisma client                                        |
 | `docker build -t <image> .`       | Build Docker image from `Dockerfile`                             |
-| `docker run ...`                  | Run containers in Docker                                         |
 | `docker-compose up --build -d`    | Build & start all services (Postgres, Redis, app) in detached mode|
 | `docker-compose exec app <cmd>`   | Execute `<cmd>` inside the `app` container                       |
 | `docker-compose logs -f app`      | Follow the logs of the `app` container                           |
@@ -204,7 +214,7 @@ Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and yo
 
 ---
 
-## 🫂 Contributing
+## 🧬 Contributing
 
 1. **Fork the Repo**
 
@@ -223,7 +233,7 @@ Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and yo
 
 ---
 
-## 📚 License
+## 📒 License
 
 This project is licensed under the [MIT License](./LICENSE).
 
