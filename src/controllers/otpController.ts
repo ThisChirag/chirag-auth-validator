@@ -58,11 +58,9 @@ export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
-      res
-        .status(409)
-        .json({
-          msg: 'User with this email already exists. Please recheck your email or login.',
-        });
+      res.status(409).json({
+        msg: 'User with this email already exists. Please recheck your email or login.',
+      });
       return;
     }
 
@@ -91,11 +89,9 @@ export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
     }
     const isValidOtp = await verifyOtpService(email, otp);
     if (!isValidOtp) {
-      res
-        .status(400)
-        .json({
-          msg: 'Invalid or expired OTP, or please re-check your email.',
-        });
+      res.status(400).json({
+        msg: 'Invalid or expired OTP, or please re-check your email.',
+      });
       return;
     }
     const hashedPassword = await hashingPassword(password);
@@ -182,11 +178,9 @@ export const verifyOtpForChangePassword = async (
     }
     const isValidOtp = await verifyOtpService(email, otp);
     if (!isValidOtp) {
-      res
-        .status(400)
-        .json({
-          msg: 'Invalid or expired OTP, or please re-check your email.',
-        });
+      res.status(400).json({
+        msg: 'Invalid or expired OTP, or please re-check your email.',
+      });
       return;
     }
     const hashedPassword = await hashingPassword(newpassword);
@@ -260,11 +254,9 @@ export const verifyOtpForgotPassword = async (
     }
     const isValidOtp = await verifyOtpService(email, otp);
     if (!isValidOtp) {
-      res
-        .status(400)
-        .json({
-          msg: 'Invalid or expired OTP, or please re-check your email.',
-        });
+      res.status(400).json({
+        msg: 'Invalid or expired OTP, or please re-check your email.',
+      });
       return;
     }
     const hashedPassword = await hashingPassword(newpassword);
