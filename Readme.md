@@ -1,16 +1,16 @@
-# Chirag Auth Validator
+# Chirag Auth Validator 🔧
 
 A robust Node.js/TypeScript authentication system providing:
 
-- Secure OTP generation/validation  
-- JWT-based authentication  
-- Password reset flows  
-- Prisma-based database integration  
-- Redis caching for OTP/session management  
+- **Secure OTP generation/validation**  
+- **JWT-based authentication**  
+- **Password reset flows**  
+- **Prisma-based database integration**  
+- **Redis caching for OTP/session management**
 
-<br />
+---
 
-## Table of Contents
+## 📙 Table of Contents
 
 1. [Overview](#overview)  
 2. [Features](#features)  
@@ -19,7 +19,7 @@ A robust Node.js/TypeScript authentication system providing:
 5. [Local Development](#local-development)  
    - [Database & Redis Setup](#database--redis-setup)  
 6. [Docker Deployment](#docker-deployment)  
-   - [Steps to Build & Run](#steps-to-build--run)  
+   - [Using Docker Compose](#using-docker-compose)  
 7. [Email Services](#email-services)  
 8. [Scripts & Commands](#scripts--commands)  
 9. [Testing via Swagger](#testing-via-swagger)  
@@ -27,210 +27,213 @@ A robust Node.js/TypeScript authentication system providing:
 11. [License](#license)  
 12. [Contact](#contact)  
 
-<br />
+---
 
-## Overview
+## 🔎 Overview
 
-**Chirag Auth Validator** is an all-in-one, developer-friendly solution for OTP-based email validation and JWT-based authentication. It uses **PostgreSQL** for persistent storage, **Redis** for caching, and integrates with **Prisma** for schema-based ORM functionality.
+**Chirag Auth Validator** is an all-in-one, developer-friendly solution for OTP-based email validation and JWT-based authentication. It uses **PostgreSQL** for persistent storage, **Redis** for caching, and integrates with **Prisma** for schema-based ORM functionality. The project also includes a Swagger UI hosted at [chiragcodes.com](https://chiragcodes.com) for easy API testing and documentation.
 
-<br />
+---
 
-## Features
+## ⚡ Features
 
 - **OTP Generation & Validation**  
 - **JWT Authentication**  
 - **Password Reset**  
 - **Prisma Integration**  
 - **Redis Support**  
-- **Flexible Email Providers**  
+- **Flexible Email Providers**
 
-<br />
+---
 
-## Requirements
+## ✅ Requirements
 
 - **Node.js** (v16+ recommended)  
 - **pnpm** (for package management)  
 - **PostgreSQL** (local or via Docker)  
 - **Redis** (local or via Docker)  
-- (Optional) **Docker** for containerized deployment  
+- **Docker & Docker Compose** (for containerized deployment)
 
-<br />
+---
 
-## Environment Configuration
+## 🛠️ Environment Configuration
 
-1. **Copy `.env.example` to `.env`:**  
+1. **Copy `.env.example` to `.env`:**
    ```bash
    cp .env.example .env
    ```
-2. Fill in the required fields:
-   - `DATABASE_URL`: Connection string for PostgreSQL.
-   - `REDIS_URL`: Connection string for Redis.
-   - `JWT_SECRET`: Secret key for JWT tokens.
-   - `RESEND_API_KEY` or other provider keys for email services.
+2. **Fill in the required fields:**
+   - `DATABASE_URL`: Connection string for PostgreSQL.  
+   - `REDIS_URL`: Connection string for Redis.  
+   - `JWT_SECRET`: Secret key for JWT tokens.  
+   - `RESEND_API_KEY`: API key for Resend email service.  
 3. **Keep `.env` private:**  
-   Make sure your `.env` is listed in `.gitignore` to avoid committing sensitive data.
+   - Ensure `.env` is listed in `.gitignore` to avoid committing sensitive data.
 
-<br />
+---
 
-## Local Development
+## 🧑‍💻 Local Development
 
-### Install Dependencies:
-```bash
-pnpm install
-```
+### Steps
 
-### Prisma Migrations & Generation:
-```bash
-npx prisma migrate dev
-npx prisma generate
-```
-
-### Run Development Server:
-```bash
-pnpm run dev
-```
-This starts the app on `PORT=8080` (by default) or whatever port is in `.env`.
+1. **Install Dependencies:**
+   ```bash
+   pnpm install
+   ```
+2. **Prisma Migrations & Generation:**
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+3. **Run Development Server:**
+   ```bash
+   pnpm run dev
+   ```
+   This starts the app on `PORT=8080` (by default) or whatever port you set in `.env`.
 
 ### Database & Redis Setup
 
-#### PostgreSQL:
-```bash
-docker run --name pg-container \
-  -e POSTGRES_PASSWORD=mysecretpassword \
-  -p 5432:5432 \
-  -d postgres
-```
-Or install locally and update:
-```dotenv
-DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/postgres?schema=public"
-```
+- **PostgreSQL** (Local or Docker):
+  ```bash
+  docker run --name pg-container \
+    -e POSTGRES_PASSWORD=mysecretpassword \
+    -p 5432:5432 \
+    -d postgres
+  ```
+  Or install locally and update `.env`:
+  ```dotenv
+  DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/postgres?schema=public"
+  ```
 
-#### Redis:
-```bash
-docker run --name redis-container \
-  -p 6379:6379 \
-  -d redis
-```
-Or install locally and update:
-```dotenv
-REDIS_URL="redis://localhost:6379"
-```
+- **Redis** (Local or Docker):
+  ```bash
+  docker run --name redis-container \
+    -p 6379:6379 \
+    -d redis
+  ```
+  Or install locally and update `.env`:
+  ```dotenv
+  REDIS_URL="redis://localhost:6379"
+  ```
 
-<br />
+---
 
-## Docker Deployment
+## 🐳 Docker Deployment
 
-If you want to run everything in Docker containers:
+If you prefer to run everything inside Docker containers, follow these steps.
 
-### Steps to Build & Run
+### Using Docker Compose
 
-1. **Create `.env`:**
-   ```bash
-   cp .env.example .env
-   ```
-   Update the placeholders with valid credentials.
+Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and your application) together.
 
-2. **Build Docker Image:**
-   ```bash
-   docker build -t chirag-auth-validator .
-   ```
+1. **Ensure Your `.env` File is Configured**
 
-3. **Run DB & Redis:**
-   ```bash
-   docker run --name pg-container \
-     -e POSTGRES_PASSWORD=mysecretpassword \
-     -p 5432:5432 \
-     -d postgres
-
-   docker run --name redis-container \
-     -p 6379:6379 \
-     -d redis
+   Update `.env` to reference the service names defined in `docker-compose.yml`:
+   ```dotenv
+   DATABASE_URL="postgresql://postgres:mysecretpassword@postgres:5432/postgres?schema=public"
+   REDIS_URL="redis://redis:6379"
    ```
 
-4. **Run the App Container:**
+2. **Run the Containers**
    ```bash
-   docker run --name chirag-auth-app \
-     --env-file .env \
-     -p 8080:8080 \
-     chirag-auth-validator
+   docker-compose up --build -d
+   ```
+   - **`--build`**: Rebuilds the Docker images based on the `Dockerfile`.
+   - **`-d`**: Runs the containers in detached mode.
+
+3. **Apply Prisma Migrations**
+   ```bash
+   docker-compose exec app npx prisma migrate dev
+   docker-compose exec app npx prisma generate
    ```
 
-5. **Apply Migrations (inside container):**
-   ```bash
-   docker exec -it chirag-auth-app npx prisma migrate dev
-   docker exec -it chirag-auth-app npx prisma generate
-   ```
+4. **Verify the Setup**
+   - **Check Logs (Optional):**
+     ```bash
+     docker-compose logs -f app
+     ```
+   - **Stop the Containers:**
+     ```bash
+     docker-compose down
+     ```
 
-<br />
+---
 
-## Email Services
+## ✉️ Email Services
 
-- **Resend**, **Postmark**, or another provider:
-  - Specify `RESEND_API_KEY` (or equivalent) in `.env`.
-  - The library uses your credentials to send OTP and reset emails.
+- **Resend**:
+  - Set `RESEND_API_KEY` in `.env`.
+  - The library uses this key to send OTP and password reset emails.
 
-<br />
+---
 
-## Scripts & Commands
+## 🔜 Scripts & Commands
 
-| Command                 | Description                              |
-|-------------------------|------------------------------------------|
-| `pnpm install`          | Install dependencies                    |
-| `pnpm run dev`          | Start development server on specified PORT |
-| `pnpm run build`        | Compile TypeScript into `dist/`         |
-| `pnpm run lint`         | Run ESLint checks                       |
-| `pnpm run lint:fix`     | Autofix lint errors where possible      |
-| `pnpm run format`       | Format code with Prettier               |
-| `npx prisma migrate dev`| Apply DB migrations in dev environment  |
-| `npx prisma generate`   | Re-generate Prisma client               |
-| `docker build -t <image> .`| Build Docker image from Dockerfile   |
-| `docker run ...`        | Run containers in Docker                |
+| Command                           | Description                                                      |
+|-----------------------------------|------------------------------------------------------------------|
+| `pnpm install`                    | Install dependencies                                             |
+| `pnpm run dev`                    | Start dev server on specified `PORT`                            |
+| `pnpm run build`                  | Compile TypeScript into `dist/`                                  |
+| `pnpm run lint`                   | Run ESLint checks                                                |
+| `pnpm run lint:fix`               | Autofix lint errors where possible                               |
+| `pnpm run format`                 | Format code with Prettier                                        |
+| `npx prisma migrate dev`          | Apply DB migrations in dev environment                           |
+| `npx prisma generate`             | Re-generate Prisma client                                        |
+| `docker build -t <image> .`       | Build Docker image from `Dockerfile`                             |
+| `docker run ...`                  | Run containers in Docker                                         |
+| `docker-compose up --build -d`    | Build & start all services (Postgres, Redis, app) in detached mode|
+| `docker-compose exec app <cmd>`   | Execute `<cmd>` inside the `app` container                       |
+| `docker-compose logs -f app`      | Follow the logs of the `app` container                           |
+| `docker-compose down`             | Stop & remove all containers, networks, and volumes              |
 
-<br />
+---
 
-## Testing via Swagger
+## 🔬 Testing via Swagger
 
-### Hosted Swagger
-You can test all API endpoints directly on `chiragcodes.com`.
+1. **Hosted Swagger**  
+   - Test all API endpoints on [chiragcodes.com](https://chiragcodes.com).
 
-### Local Swagger
-If running the project locally, you may need to update the `servers:` section in `openapi.yml` to:
-```yaml
-servers:
-  - url: http://localhost:8080/api
-    description: Local Development Server
-```
-This way, you can test endpoints at `http://localhost:8080/docs` (or wherever you set up Swagger UI).
+2. **Local Swagger**  
+   - Update the `servers:` section in `openapi.yml` to:
+     ```yaml
+     servers:
+       - url: http://localhost:8080/api
+         description: Local Development Server
+     ```
+   - Then navigate to [http://localhost:8080/docs](http://localhost:8080/docs) to test endpoints.
 
-<br />
+---
 
-## Contributing
+## 🫂 Contributing
 
 1. **Fork the Repo**
+
 2. **Create a Branch**
    ```bash
    git checkout -b feature/new-feature
    ```
-3. **Make Changes & Commit**
+3. **Make Changes & Test**
+
+4. **Commit & Push**
    ```bash
    git commit -m "Add new feature"
-   ```
-4. **Push to Your Fork**
-   ```bash
    git push origin feature/new-feature
    ```
-5. **Open a Pull Request**
+5. **Open a Pull Request** on GitHub
 
-<br />
+---
 
-## License
+## 📚 License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](./LICENSE).
 
-<br />
+---
 
-## Contact
+## 📧 Contact
 
-- Website: [chiragcodes.com](http://chiragcodes.com)  
-- Email: chirag@chiragcodes.com  
-- Alternate: er.chiragsharma.atemail@gmail.com
+- **Website**: [chiragcodes.com](https://chiragcodes.com)  
+- **Email**: [chirag@chiragcodes.com](mailto:chirag@chiragcodes.com)  
+- **Alternate**: [er.chiragsharma.atemail@gmail.com](mailto:er.chiragsharma.atemail@gmail.com)
+
+For issues or suggestions, feel free to open a GitHub issue or reach out via email.
+
