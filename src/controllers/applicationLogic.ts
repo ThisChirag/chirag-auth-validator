@@ -3,9 +3,9 @@ import { generateToken } from '../utils /JWTGeneratorLogic';
 import { AuthenticatedRequest } from '../middlewares/authenticateToken';
 import { verifyingPassword } from '../utils /hashPassword';
 import prisma from '../utils /prisma';
-import { setNewToken, connectReddis } from '../redisCache';
+import { setNewToken, connectRedis } from '../redisCache';
 
-connectReddis();
+connectRedis();
 
 const jwt_expiration =
   parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION!) / 3600;

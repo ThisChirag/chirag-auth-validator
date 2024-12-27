@@ -31,7 +31,7 @@ A robust Node.js/TypeScript authentication system providing:
 
 ## 🔎 Overview
 
-**Chirag Auth Validator** is an all-in-one, developer-friendly solution for OTP-based email validation and JWT-based authentication. It uses **PostgreSQL** for persistent storage, **Redis** for caching, and integrates with **Prisma** for schema-based ORM functionality. The project also includes a Swagger UI hosted at [chiragcodes.com](https://chiragcodes.com) for easy API testing and documentation.
+**Chirag Auth Validator** is an all-in-one, developer-friendly solution for OTP-based email validation and JWT-based authentication. It uses **PostgreSQL** for persistent storage, **Redis** for caching, and integrates with **Prisma** for schema-based ORM functionality. The project also includes a Swagger UI hosted at [auth.chiragcodes.com](https://auth.chiragcodes.com) for easy API testing and documentation.
 
 ---
 
@@ -76,6 +76,8 @@ A robust Node.js/TypeScript authentication system providing:
    - `REDIS_URL`: Connection string for Redis.
    - `JWT_SECRET`: Secret key for JWT tokens.
    - `RESEND_API_KEY`: API key for Resend email service.
+     - **Note:** Ensure your domain is verified before using the Resend API key.
+   - `YOUR_DOMAIN`: Use the format `your_email@yourdomain.com` to ensure proper email delivery.
 4. **Keep `.env` private:**
    - Ensure `.env` is listed in `.gitignore` to avoid committing sensitive data.
 
@@ -181,7 +183,8 @@ Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and yo
 
 - **Resend**:
   - Set `RESEND_API_KEY` in `.env`.
-  - The library uses this key to send OTP and password reset emails.
+  - Ensure your domain is verified before using the Resend API key.
+  - Use the format `your_email@yourdomain.com` for `YOUR_DOMAIN` in `.env` to ensure proper email delivery.
 
 ---
 
@@ -209,7 +212,7 @@ Docker Compose simplifies running multiple containers (PostgreSQL, Redis, and yo
 
 1. **Hosted Swagger**
 
-   - Test all API endpoints on [chiragcodes.com](https://chiragcodes.com).
+   - Test all API endpoints on [auth.chiragcodes.com](https://auth.chiragcodes.com).
 
 2. **Local Swagger**
    - Update the `servers:` section in `openapi.yml` to:

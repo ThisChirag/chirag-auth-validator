@@ -28,7 +28,7 @@ export const sendVerificationEmail = async (
         <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
           <h2 style="color: #555;">Verify Your Email</h2>
           <p>Your OTP is: <strong style="color: #2d89ef;">${otp}</strong></p>
-          <p>This OTP is valid for <strong>${otp_ttl}</strong>.</p>
+          <p>This OTP is valid for <strong>${otp_ttl} minutes</strong>.</p>
           <p>If you did not request this, please ignore this email.</p>
         </div>
       `,
