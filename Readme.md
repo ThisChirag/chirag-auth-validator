@@ -10,6 +10,24 @@ A robust Node.js/TypeScript authentication system providing:
 
 ---
 
+[![NPM](https://img.shields.io/npm/v/@thischirag/auth.svg)](https://www.npmjs.com/package/@thischirag/auth)
+
+## 📦 NPM Package
+
+**Available on NPM!**  
+You can install this package using either **npm** or **pnpm**:
+
+```bash
+npm install @thischirag/auth
+```
+
+```bash
+pnpm add @thischirag/auth
+```
+
+For more information, refer to the [NPM Package Documentation](./npm-package.md).
+
+
 ## 📙 Table of Contents
 
 1. [Overview](#overview)
