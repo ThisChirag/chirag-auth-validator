@@ -1,26 +1,30 @@
 # @thischirag/auth 🔧
 
+**Latest Version: 1.0.3**
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/npm/v/@thischirag/auth)
 ![Node.js](https://img.shields.io/badge/node.js-16%2B-green.svg)
 
 **Chirag Auth Validator** is a robust Node.js/TypeScript authentication system available as an npm package. It provides secure OTP generation/validation, JWT-based authentication, password reset flows, Prisma-based database integration, Redis caching for OTP/session management, and rate limiting to protect your application from excessive requests. Easily integrate it into your projects to handle user authentication and security with ease.
 
+You can directly test all the endpoints at [auth.chiragcodes.com](https://auth.chiragcodes.com) and check what the required body should be sent by the user.
+
 ## 📙 Table of Contents
 
 1. [Overview](#overview)
 2. [Features](#features)
 3. [Available Endpoints](#available-endpoints)
-    - [Authentication Routes](#authentication-routes)
-    - [Password Management](#password-management)
-    - [Protected Routes](#protected-routes)
+   - [Authentication Routes](#authentication-routes)
+   - [Password Management](#password-management)
+   - [Protected Routes](#protected-routes)
 4. [Prerequisites](#prerequisites)
 5. [Installation](#installation)
 6. [Environment Configuration](#environment-configuration)
 7. [Prisma Integration](#prisma-integration)
 8. [Rate Limiting](#rate-limiting)
 9. [Local Development](#local-development)
-    - [Database & Redis Setup](#database--redis-setup)
+   - [Database & Redis Setup](#database--redis-setup)
 10. [Email Services](#email-services)
 11. [Usage](#usage)
     - [Import Routes](#import-routes)
@@ -60,29 +64,28 @@ For testing purposes, you can access the Swagger UI at [auth.chiragcodes.com](ht
 
 ### Authentication Routes
 
-| Method | Endpoint                              | Description                     |
-| ------ | ------------------------------------- | ------------------------------- |
-| POST   | `/api/v1/auth/login`                  | Login with email/username       |
-| POST   | `/api/v1/auth/signup/request-otp`     | Request OTP for sign-up         |
-| POST   | `/api/v1/auth/signup/verify-otp`      | Verify OTP and complete sign-up |
+| Method | Endpoint                          | Description                     |
+| ------ | --------------------------------- | ------------------------------- |
+| POST   | `/api/v1/auth/login`              | Login with email/username       |
+| POST   | `/api/v1/auth/signup/request-otp` | Request OTP for sign-up         |
+| POST   | `/api/v1/auth/signup/verify-otp`  | Verify OTP and complete sign-up |
 
 ### Password Management
 
-| Method | Endpoint                                    | Description                        |
-| ------ | ------------------------------------------- | ---------------------------------- |
-| POST   | `/api/v1/users/password/request-otp`        | Request OTP for password change    |
-| POST   | `/api/v1/users/password/verify-otp`         | Verify OTP and change password     |
-| POST   | `/api/v1/users/password/reset/request-otp`  | Request OTP for password reset     |
-| POST   | `/api/v1/users/password/reset/verify-otp`   | Verify OTP and reset password      |
+| Method | Endpoint                                   | Description                     |
+| ------ | ------------------------------------------ | ------------------------------- |
+| POST   | `/api/v1/users/password/request-otp`       | Request OTP for password change |
+| POST   | `/api/v1/users/password/verify-otp`        | Verify OTP and change password  |
+| POST   | `/api/v1/users/password/reset/request-otp` | Request OTP for password reset  |
+| POST   | `/api/v1/users/password/reset/verify-otp`  | Verify OTP and reset password   |
 
 ### Protected Routes
 
-| Method | Endpoint        | Description            |
-| ------ | --------------- | ---------------------- |
-| GET    | `/api/v1/home`  | Access protected route |
+| Method | Endpoint       | Description            |
+| ------ | -------------- | ---------------------- |
+| GET    | `/api/v1/home` | Access protected route |
 
 **Note:** The above endpoints are predefined. If you prefer to use different route paths or need more control over your routing, you can directly import and use the controllers provided by the package. Refer to the [Usage](#usage) section to see how to add your own paths.
-
 
 ---
 
@@ -115,62 +118,58 @@ pnpm add @thischirag/auth
 
 1. **Copy `.env.example` to `.env`:**
 
-    ```bash
-    cp node_modules/@thischirag/auth/.env.example .env
-    ```
+   ```bash
+   cp node_modules/@thischirag/auth/.env.example .env
+   ```
 
-    *Note: Ensure that this command does not overwrite your existing `.env` file. If you already have a `.env` file, consider backing it up or merging the contents instead.*
+   _Note: Ensure that this command does not overwrite your existing `.env` file. If you already have a `.env` file, consider backing it up or merging the contents instead._
 
 2. **Fill in the Required Fields:**
 
-    ```dotenv
-    # JWT Secret Key
-    JWT_SECRET="your_jwt_secret_here"
+   ```dotenv
+   # JWT Secret Key
+   JWT_SECRET="your_jwt_secret_here"
 
-    # Resend API Key
-    RESEND_API_KEY="your_resend_api_key_here"
+   # Resend API Key
+   RESEND_API_KEY="your_resend_api_key_here"
 
-    # Application Port
-    PORT=3000
+   # Application Port
+   PORT=3000
 
-    # Environment
-    NODE_ENV="development"
+   # Environment
+   NODE_ENV="development"
 
-    # Salt Rounds for Password Hashing
-    SALT_ROUNDS=10
+   # Salt Rounds for Password Hashing
+   SALT_ROUNDS=10
 
-    # Length of OTP for Email Verification
-    OTP_LENGTH=6
+   # Length of OTP for Email Verification
+   OTP_LENGTH=6
 
-    # JWT Configuration
-    JWT_ACCESS_TOKEN_EXPIRATION=3600
-    JWT_ISSUER="https://yourdomain.com"
-    JWT_AUDIENCE="yourdomain.com"
-    JWT_TTL=3600
+   # JWT Configuration
+   JWT_ACCESS_TOKEN_EXPIRATION=3600
+   JWT_ISSUER="https://yourdomain.com"
+   JWT_AUDIENCE="yourdomain.com"
+   JWT_TTL=3600
 
-    # OTP TTL
-    OTP_TTL=300
+   # OTP TTL
+   OTP_TTL=300
 
-    # Your Domain Name
-    YOUR_DOMAIN="your_email@yourdomain.com"
+   # Your Domain Name
+   YOUR_DOMAIN="your_email@yourdomain.com"
 
-    # Database Connection String
-    DATABASE_URL="postgresql://<user>:<password>@<host>:<port>/<database>?schema=public"
+   # Database Connection String
+   # DATABASE_URL="postgresql://<user>:<password>@<host>:<port>/<database>?schema=public"
 
-    # Redis Connection String
-    REDIS_URL="redis://<host>:<port>"
+   # Redis Connection String
+   # REDIS_URL="redis://redis:6379"
 
-    # Rate Limiting Configuration
-    RATE_LIMIT_MAX_REQUESTS=10
-    RATE_LIMIT_WINDOW_SECONDS=60
-
-    # Debugging (Optional)
-    DEBUG="true"
-    ```
+   # Debugging (Optional)
+   DEBUG="true"
+   ```
 
 3. **Keep `.env` Private:**
 
-    Ensure `.env` is listed in `.gitignore` to avoid committing sensitive data.
+   Ensure `.env` is listed in `.gitignore` to avoid committing sensitive data.
 
 ---
 
@@ -192,8 +191,6 @@ Ensure the following variables are set in your `.env` file:
 - `YOUR_DOMAIN`
 - `DATABASE_URL`
 - `REDIS_URL`
-- `RATE_LIMIT_MAX_REQUESTS`
-- `RATE_LIMIT_WINDOW_SECONDS`
 
 You can refer to `.env.example` for the complete list and default values.
 
@@ -207,69 +204,58 @@ This package uses Prisma for database operations. Make sure to install @prisma/c
 
 1. **Copy the Schema File from the Package:**
 
-    ```bash
-    mkdir -p prisma && cp node_modules/@thischirag/auth/prisma/schema.prisma prisma/schema.prisma
-    ```
+   ```bash
+   mkdir -p prisma && cp node_modules/@thischirag/auth/prisma/schema.prisma prisma/schema.prisma
+   ```
 
 2. **Run Prisma Migrations:**
 
-    Apply the migrations to your database:
+   Apply the migrations to your database:
 
-    ```bash
-    npx prisma migrate dev --name init --schema=prisma/schema.prisma
-    ```
+   ```bash
+   npx prisma migrate dev --name init --schema=prisma/schema.prisma
+   ```
 
 3. **Generate Prisma Client:**
 
-    Generate the Prisma client for your project:
+   Generate the Prisma client for your project:
 
-    ```bash
-    npx prisma generate --schema=prisma/schema.prisma
-    ```
+   ```bash
+   npx prisma generate --schema=prisma/schema.prisma
+   ```
 
 ### Option 2: Directly Run Prisma Commands with Provided Schema Path
 
 1. **Run Prisma Migrations and Generate:**
 
-    Apply the migrations and generate the Prisma client using the schema path provided by the package:
+   Apply the migrations and generate the Prisma client using the schema path provided by the package:
 
-    ```bash
-    npx prisma migrate dev --name init --schema=node_modules/@thischirag/auth/prisma/schema.prisma
-    npx prisma generate --schema=node_modules/@thischirag/auth/prisma/schema.prisma
-    ```
+   ```bash
+   npx prisma migrate dev --name init --schema=node_modules/@thischirag/auth/prisma/schema.prisma
+   npx prisma generate --schema=node_modules/@thischirag/auth/prisma/schema.prisma
+   ```
 
 2. **Ensure Model Naming:**
 
-    Ensure the Prisma schema includes the `Chirag_Auth_User` model as shown below:
+   Ensure the Prisma schema includes the `Chirag_Auth_User` model as shown below:
 
-    ```prisma
-    model Chirag_Auth_User {
-      id         String    @id @default(uuid())
-      username   String    @unique @db.VarChar(50)      
-      email      String    @unique @db.VarChar(255)     
-      password   String    @db.VarChar(255)              
-      name       String    @db.VarChar(100)              
-      created_at DateTime  @default(now()) @db.Timestamptz(6)
-      updated_at DateTime  @updatedAt @db.Timestamptz(6)
-    }
-    ```
+   ```prisma
+   model Chirag_Auth_User {
+     id         String    @id @default(uuid())
+     username   String    @unique @db.VarChar(50)
+     email      String    @unique @db.VarChar(255)
+     password   String    @db.VarChar(255)
+     name       String    @db.VarChar(100)
+     created_at DateTime  @default(now()) @db.Timestamptz(6)
+     updated_at DateTime  @updatedAt @db.Timestamptz(6)
+   }
+   ```
 
 ---
 
 ## 🛡️ Rate Limiting
 
-To protect your application from excessive requests, **Chirag Auth Validator** includes rate limiting functionality using Redis. You can configure the rate limiter by setting the following variables in your `.env` file:
-
-```dotenv
-# Rate Limiting Configuration
-RATE_LIMIT_MAX_REQUESTS=100
-RATE_LIMIT_WINDOW_SECONDS=60
-```
-
-- `RATE_LIMIT_MAX_REQUESTS`: Maximum number of requests allowed within the window.
-- `RATE_LIMIT_WINDOW_SECONDS`: Time window in seconds for rate limiting.
-
-Feel free to adjust these values according to your application's requirements by referring to the `.env.example` file.
+To protect your application from excessive requests, **Chirag Auth Validator** includes rate limiting functionality using Redis.
 
 ---
 
@@ -277,19 +263,19 @@ Feel free to adjust these values according to your application's requirements by
 
 - **PostgreSQL** (Local Installation):
 
-    Ensure PostgreSQL is installed on your machine. Update `.env` with your PostgreSQL credentials:
+  Ensure PostgreSQL is installed on your machine. Update `.env` with your PostgreSQL credentials:
 
-    ```dotenv
-    DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/postgres?schema=public"
-    ```
+  ```dotenv
+  DATABASE_URL="postgresql://postgres:mysecretpassword@localhost:5432/postgres?schema=public"
+  ```
 
 - **Redis** (Local Installation):
 
-    Ensure Redis is installed on your machine. Update `.env` with your Redis credentials:
+  Ensure Redis is installed on your machine. Update `.env` with your Redis credentials:
 
-    ```dotenv
-    REDIS_URL="redis://localhost:6379"
-    ```
+  ```dotenv
+  REDIS_URL="redis://localhost:6379"
+  ```
 
 ---
 
@@ -328,15 +314,12 @@ app.listen(PORT, () => {
 
 The `/api/v1/home` endpoint already utilizes the `authenticateToken` middleware provided by the package. You can apply this middleware to other routes as needed to protect them.
 
-Similarly, the `rateLimiter` middleware is applied to control the number of requests and prevent abuse. You can adjust the rate limiting settings via your `.env` file.
-
 #### Using Middleware in Other Routes
 
 ```javascript
-const { authenticateToken, rateLimiter } = require('@thischirag/auth');
+const { authenticateToken } = require('@thischirag/auth');
 
-// Apply rateLimiter to specific routes
-app.use('/api/v1/secure', rateLimiter, authenticateToken, secureRoutes);
+app.use('/api/v1/secure', authenticateToken, secureRoutes);
 ```
 
 ### Controllers
@@ -346,14 +329,16 @@ If you prefer to use different route paths or need more control over your routin
 #### Available Controllers:
 
 - **Middleware:**
+
   - `authenticateToken`
-  - `rateLimiter`
 
 - **Prisma Utilities:**
+
   - `getPrismaClient`
   - `setPrismaClient`
 
 - **Authentication Controllers:**
+
   - `changePassword`
   - `forgotPassword`
   - `requestOtp`
@@ -371,7 +356,6 @@ If you prefer to use different route paths or need more control over your routin
 const express = require('express');
 const {
   authenticateToken,
-  rateLimiter,
   changePassword,
   forgotPassword,
   requestOtp,
@@ -379,7 +363,7 @@ const {
   verifyOtpForChangePassword,
   verifyOtpForgotPassword,
   home,
-  login
+  login,
 } = require('@thischirag/auth');
 
 require('dotenv').config();
@@ -388,15 +372,22 @@ const app = express();
 app.use(express.json());
 
 // Custom Routes
-app.post('/custom/login', rateLimiter, login);
-app.post('/custom/signup/request-otp', rateLimiter, requestOtp);
-app.post('/custom/signup/verify-otp', rateLimiter, verifyOtp);
-app.post('/custom/password/change', rateLimiter, authenticateToken, changePassword);
-app.post('/custom/password/forgot', rateLimiter, forgotPassword);
-app.post('/custom/password/forgot/verify-otp', rateLimiter, verifyOtpForgotPassword);
+app.post('/custom/login', login);
+app.post('/custom/signup/request-otp', requestOtp);
+app.post('/custom/signup/verify-otp', verifyOtp);
+app.post(
+  '/custom/password/change',
+  authenticateToken,
+  changePassword,
+);
+app.post('/custom/password/forgot', forgotPassword);
+app.post(
+  '/custom/password/forgot/verify-otp',
+  verifyOtpForgotPassword,
+);
 
 // Protected Route
-app.get('/custom/home', rateLimiter, authenticateToken, home);
+app.get('/custom/home', authenticateToken, home);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -410,62 +401,65 @@ app.listen(PORT, () => {
 
 1. **Install TypeScript and Necessary Types:**
 
-    If you haven't already, install TypeScript and types for Express:
+   If you haven't already, install TypeScript and types for Express:
 
-    ```bash
-    npm install typescript @types/node @types/express --save-dev
-    ```
+   ```bash
+   npm install typescript @types/node @types/express --save-dev
+   ```
 
-    or
+   or
 
-    ```bash
-    pnpm add typescript @types/node @types/express --save-dev
-    ```
+   ```bash
+   pnpm add typescript @types/node @types/express --save-dev
+   ```
 
 2. **Configure TypeScript:**
 
-    Initialize a `tsconfig.json` if you don't have one:
+   Initialize a `tsconfig.json` if you don't have one:
 
-    ```bash
-    npx tsc --init
-    ```
+   ```bash
+   npx tsc --init
+   ```
 
 3. **Import and Use in TypeScript:**
 
-    Here's an example of how to use **Chirag Auth Validator** in a TypeScript Express application:
+   Here's an example of how to use **Chirag Auth Validator** in a TypeScript Express application:
 
-    ```typescript
-    import express, { Request, Response } from 'express';
-    import { userRoutes, authenticateToken, rateLimiter } from '@thischirag/auth';
-    import dotenv from 'dotenv';
+   ```typescript
+   import express, { Request, Response } from 'express';
+   import {
+     userRoutes,
+     authenticateToken,
+   } from '@thischirag/auth';
+   import dotenv from 'dotenv';
 
-    dotenv.config();
+   dotenv.config();
 
-    const app = express();
-    app.use(express.json());
+   const app = express();
+   app.use(express.json());
 
-    // Use the routes provided by the package
-    app.use('/api', userRoutes);
+   // Use the routes provided by the package
+   app.use('/api', userRoutes);
 
-    // Example of a protected route
-    app.get('/api/v1/home', authenticateToken, (req: Request, res: Response) => {
-      res.send('Access to protected route granted!');
-    });
+   // Example of a protected route
+   app.get('/api/v1/home', authenticateToken, (req: Request, res: Response) => {
+     res.send('Access to protected route granted!');
+   });
 
-    const PORT: number = Number(process.env.PORT) || 3000;
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-    ```
+   const PORT: number = Number(process.env.PORT) || 3000;
+   app.listen(PORT, () => {
+     console.log(`Server is running on port ${PORT}`);
+   });
+   ```
 
 4. **Using Controllers Directly in TypeScript:**
 
 typescript
+
 ```typescript
 import express, { Request, Response } from 'express';
 import {
   authenticateToken,
-  rateLimiter,
   changePassword,
   forgotPassword,
   requestOtp,
@@ -473,7 +467,7 @@ import {
   verifyOtpForChangePassword,
   verifyOtpForgotPassword,
   home,
-  login
+  login,
 } from '@thischirag/auth';
 import dotenv from 'dotenv';
 
@@ -483,15 +477,22 @@ const app = express();
 app.use(express.json());
 
 // Custom Routes
-app.post('/custom/login', rateLimiter, login);
-app.post('/custom/signup/request-otp', rateLimiter, requestOtp);
-app.post('/custom/signup/verify-otp', rateLimiter, verifyOtp);
-app.post('/custom/password/change', rateLimiter, authenticateToken, changePassword);
-app.post('/custom/password/forgot', rateLimiter, forgotPassword);
-app.post('/custom/password/forgot/verify-otp', rateLimiter, verifyOtpForgotPassword);
+app.post('/custom/login', login);
+app.post('/custom/signup/request-otp', requestOtp);
+app.post('/custom/signup/verify-otp', verifyOtp);
+app.post(
+  '/custom/password/change',
+  authenticateToken,
+  changePassword,
+);
+app.post('/custom/password/forgot', forgotPassword);
+app.post(
+  '/custom/password/forgot/verify-otp',
+  verifyOtpForgotPassword,
+);
 
 // Protected Route
-app.get('/custom/home', rateLimiter, authenticateToken, home);
+app.get('/custom/home', authenticateToken, home);
 
 const PORT: number = Number(process.env.PORT) || 3000;
 app.listen(PORT, () => {
@@ -515,11 +516,12 @@ Use tools like [Postman](https://www.postman.com/) or [Insomnia](https://insomni
 This project is licensed under the [MIT License](./LICENSE).
 
 📧 Contact
+
 - **Website**: [chiragcodes.com](https://chiragcodes.com)
 - **Email**: [chirag@chiragcodes.com](mailto:chirag@chiragcodes.com)
 - **Alternate**: [er.chiragsharma.atemail@gmail.com](mailto:er.chiragsharma.atemail@gmail.com)
 
-For issues or suggestions, feel free to [open an issue](https://github.com/yourusername/auth-validator/issues) in the GitHub repository or reach out via email.
+For issues or suggestions, feel free to [open an issue](https://github.com/ThisChirag/chirag-auth-validator/issues) in the GitHub repository or reach out via email.
 
 📄 Package Contents
 The **@thischirag/auth** package includes:
@@ -531,4 +533,5 @@ The **@thischirag/auth** package includes:
 Ensure you have copied the schema file to your project's Prisma directory and applied the necessary migrations as outlined in the [Prisma Integration](#prisma-integration) section.
 
 ---
-*Happy Coding! 🚀*
+
+_Happy Coding! 🚀_
