@@ -1,18 +1,21 @@
 openapi: 3.0.3
 info:
   title: Chirag Auth Validator API
-  version: '1.0.0'
-  description: >
+  version: '1.0.3'
+  description: |
     A Node.js/Express-based API for user authentication, OTP-based verification, 
     password reset, and protected routes.
 
-# External documentation link (GitHub repo)
-externalDocs:
-  description: GitHub Repository
-  url: 'https://github.com/ThisChirag/chirag-auth-validator'
+    **NPM-Package**  
+
+    - You can use it as an npm package too, just run `pnpm install @thischirag/auth`.
+
+    - For more information, refer to the: [NPM Registry](https://www.npmjs.com/package/@thischirag/auth).
+
+    - Or you can clone and try the repo too: [GitHub Repository](https://github.com/ThisChirag/chirag-auth-validator).
 
 servers:
-  - url: https://chiragcodes.com/api
+  - url: https://auth.chiragcodes.com/api
     description: Production Server
 
 paths:
@@ -527,7 +530,7 @@ components:
           example: c8798112-66cc-4b7f-a0af-4f6d2f082022
         username:
           type: string
-          example: chirag
+          example: chirag123
         email:
           type: string
           format: email

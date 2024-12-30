@@ -27,7 +27,6 @@ pnpm add @thischirag/auth
 
 For more information, refer to the [NPM Package Documentation](https://www.npmjs.com/package/@thischirag/auth) or [NPM-Package.md](./npm-package.md).
 
-
 ## 📙 Table of Contents
 
 1. [Overview](#overview)

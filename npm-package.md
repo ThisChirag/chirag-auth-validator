@@ -375,16 +375,9 @@ app.use(express.json());
 app.post('/custom/login', login);
 app.post('/custom/signup/request-otp', requestOtp);
 app.post('/custom/signup/verify-otp', verifyOtp);
-app.post(
-  '/custom/password/change',
-  authenticateToken,
-  changePassword,
-);
+app.post('/custom/password/change', authenticateToken, changePassword);
 app.post('/custom/password/forgot', forgotPassword);
-app.post(
-  '/custom/password/forgot/verify-otp',
-  verifyOtpForgotPassword,
-);
+app.post('/custom/password/forgot/verify-otp', verifyOtpForgotPassword);
 
 // Protected Route
 app.get('/custom/home', authenticateToken, home);
@@ -427,10 +420,7 @@ app.listen(PORT, () => {
 
    ```typescript
    import express, { Request, Response } from 'express';
-   import {
-     userRoutes,
-     authenticateToken,
-   } from '@thischirag/auth';
+   import { userRoutes, authenticateToken } from '@thischirag/auth';
    import dotenv from 'dotenv';
 
    dotenv.config();
@@ -480,16 +470,9 @@ app.use(express.json());
 app.post('/custom/login', login);
 app.post('/custom/signup/request-otp', requestOtp);
 app.post('/custom/signup/verify-otp', verifyOtp);
-app.post(
-  '/custom/password/change',
-  authenticateToken,
-  changePassword,
-);
+app.post('/custom/password/change', authenticateToken, changePassword);
 app.post('/custom/password/forgot', forgotPassword);
-app.post(
-  '/custom/password/forgot/verify-otp',
-  verifyOtpForgotPassword,
-);
+app.post('/custom/password/forgot/verify-otp', verifyOtpForgotPassword);
 
 // Protected Route
 app.get('/custom/home', authenticateToken, home);
