@@ -1,4 +1,4 @@
-import prisma from '../utils /prisma';
+import prisma from '../utils/prisma';
 import { Response } from 'express';
 
 export const checkUsernameExistence = async (

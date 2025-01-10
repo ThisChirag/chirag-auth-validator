@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { TokenPayload } from '../utils /JWTGeneratorLogic';
-import prisma from '../utils /prisma';
+import { TokenPayload } from '../utils/JWTGeneratorLogic';
+import prisma from '../utils/prisma';
 import { getTokenFromUser_Id } from '../redisCache';
 
 dotenv.config();

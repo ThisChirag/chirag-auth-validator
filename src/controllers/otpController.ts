@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import prisma from '../utils /prisma';
-import { validateFields } from '../utils /validateFields';
-import { validateEmailDomain } from '../utils /validateDomain';
+import prisma from '../utils/prisma';
+import { validateFields } from '../utils/validateFields';
+import { validateEmailDomain } from '../utils/validateDomain';
 import { validateEmail } from '../middlewares/validateEmail';
-import { validatePassword } from '../utils /validatePassword';
+import { validatePassword } from '../utils/validatePassword';
 import {
   generateOtp,
   storeOtp,
   verifyOtp as verifyOtpService,
 } from '../services/otpService';
 import { sendVerificationEmail } from '../services/emailService';
-import { hashingPassword, verifyingPassword } from '../utils /hashPassword';
+import { hashingPassword, verifyingPassword } from '../utils/hashPassword';
 import { deleteCurrentToken } from '../redisCache';
 import { checkUsernameExistence } from '../services/checkUsername';
 

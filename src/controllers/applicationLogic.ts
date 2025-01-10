@@ -1,8 +1,8 @@
 import { Response } from 'express';
-import { generateToken } from '../utils /JWTGeneratorLogic';
+import { generateToken } from '../utils/JWTGeneratorLogic';
 import { AuthenticatedRequest } from '../middlewares/authenticateToken';
-import { verifyingPassword } from '../utils /hashPassword';
-import prisma from '../utils /prisma';
+import { verifyingPassword } from '../utils/hashPassword';
+import prisma from '../utils/prisma';
 import { setNewToken, connectRedis } from '../redisCache';
 
 connectRedis();
